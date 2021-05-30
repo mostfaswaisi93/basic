@@ -6,7 +6,7 @@ return [
             'users'             => 'c,r,u,d,p,t',
             'roles'             => 'c,r,u,d,p,t',
             'settings'          => 'c,r,u,d,p,t',
-        ],
+        ]
     ],
 
     'permissions_map'       => [

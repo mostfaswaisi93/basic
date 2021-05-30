@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Gaza',
 
     /*
     |--------------------------------------------------------------------------
@@ -161,9 +161,9 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        Brian2694\Toastr\ToastrServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
+        Brian2694\Toastr\ToastrServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
 
         /*
@@ -233,9 +233,9 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Toastr'  => Brian2694\Toastr\Facades\Toastr::class,
         'Image' => Intervention\Image\Facades\Image::class,
-
     ],
 
 ];
