@@ -182,7 +182,8 @@
                         <span class="user-name font-weight-bolder">
                             {{ auth()->user()->full_name }}
                         </span>
-                        {{-- <span class="user-status">{{ trans('admin.available') }} {{ ucfirst(auth()->user()->roles->first()->name) }}</span> --}}
+                        {{-- <span class="user-status">{{ trans('admin.available') }}
+                        {{ ucfirst(auth()->user()->roles->first()->name) }}</span> --}}
                         <span class="user-status">{{ auth()->user()->roles->first()->name }}</span>
                     </div>
                     <span class="avatar">
