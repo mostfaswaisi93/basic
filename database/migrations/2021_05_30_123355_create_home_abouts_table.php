@@ -15,6 +15,9 @@ class CreateHomeAboutsTable extends Migration
     {
         Schema::create('home_abouts', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->text('short_dis');
+            $table->text('long_dis');
             $table->timestamps();
         });
     }
