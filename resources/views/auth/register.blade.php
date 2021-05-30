@@ -8,8 +8,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <meta name="description" content="Laravel - Basic System">
-    <meta name="keywords" content="Laravel - Basic System">
+    <meta name="description" content="Laravel - Basic">
+    <meta name="keywords" content="Laravel - Basic">
     <meta name="author" content="mostfaswaisi93">
     <title>{{ trans('admin.sitename') }} | {{ trans('admin.register') }}</title>
     <link rel="apple-touch-icon" href="{{ url('backend/app-assets/images/ico/apple-icon-120.png') }}">
@@ -156,20 +156,35 @@
                                         <label class="form-label" for="username">{{ trans('admin.username') }}</label>
                                         <input class="form-control" id="username" type="text" name="username"
                                             placeholder="{{ trans('admin.username') }}" aria-describedby="username"
-                                            autofocus="" tabindex="1" />
+                                            autofocus="" tabindex="1" required />
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label" for="email">{{ trans('admin.email') }}</label>
                                         <input class="form-control" id="email" type="email" name="email"
                                             placeholder="{{ trans('admin.email') }}" aria-describedby="email"
-                                            tabindex="2" />
+                                            tabindex="2" required />
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label" for="password">{{ trans('admin.password') }}</label>
                                         <div class="input-group input-group-merge form-password-toggle">
                                             <input class="form-control form-control-merge" id="password" type="password"
                                                 name="password" placeholder="{{ trans('admin.password') }}"
-                                                aria-describedby="password" tabindex="3" />
+                                                aria-describedby="password" tabindex="3" required />
+                                            <div class="input-group-append">
+                                                <span class="input-group-text cursor-pointer">
+                                                    <i data-feather="eye"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label"
+                                            for="password-confirm">{{ trans('admin.password_confirmation') }}</label>
+                                        <div class="input-group input-group-merge form-password-toggle">
+                                            <input class="form-control form-control-merge" id="password-confirm"
+                                                type="password" name="password_confirmation"
+                                                placeholder="{{ trans('admin.password_confirmation') }}"
+                                                aria-describedby="password" tabindex="3" required />
                                             <div class="input-group-append">
                                                 <span class="input-group-text cursor-pointer">
                                                     <i data-feather="eye"></i>
@@ -196,7 +211,7 @@
                                         <span>&nbsp;{{ trans('admin.login') }}</span>
                                     </a>
                                 </p>
-                                <div class="divider my-2">
+                                {{-- <div class="divider my-2">
                                     <div class="divider-text">-</div>
                                 </div>
                                 <div class="auth-footer-btn d-flex justify-content-center">
@@ -212,7 +227,7 @@
                                     <a class="btn btn-github" href="javascript:void(0)">
                                         <i data-feather="github"></i>
                                     </a>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <!-- Register-->

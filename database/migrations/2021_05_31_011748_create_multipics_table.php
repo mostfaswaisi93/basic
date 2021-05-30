@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateConstantsTable extends Migration
+class CreateMultipicsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,9 @@ class CreateConstantsTable extends Migration
      */
     public function up()
     {
-        Schema::create('constants', function (Blueprint $table) {
+        Schema::create('multipics', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('type');
-            $table->integer('enabled')->default(1);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -30,6 +26,6 @@ class CreateConstantsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('constants');
+        Schema::dropIfExists('multipics');
     }
 }

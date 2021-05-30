@@ -92,10 +92,8 @@
                 },
                 { data: 'full_name',
                     render: function(data, type, row, meta){
-                        var text1 = "<div><b>{{ trans('admin.full_name') }}: </b>"+ row.full_name +" - </div>";
-                        var text2 = "<div><b>{{ trans('admin.username') }}: </b>"+ row.username +" - </div>";
-                        var text3 = "<div><b>{{ trans('admin.email') }}: </b>"+ row.email +"</div>";
-                        return text1 + text2 + text3;
+                        var text = "<div><b>{{ trans('admin.name') }}: </b>"+ row.name +" - </div>";
+                        return text;
                     }
                 },
                 { data: 'enabled' },
@@ -136,7 +134,7 @@
                     }
                 }
             ],
-            "columnDefs": [ 
+            "columnDefs": [
             {
                 // Checkboxes
                 "targets": 0,
@@ -164,7 +162,7 @@
                     var $checked = $(`
                         <div class="custom-switch-status">
                             <div class="custom-control custom-switch custom-switch-success">
-                                <input type="checkbox" data-id="${row.id}" id="status(${row.id})" 
+                                <input type="checkbox" data-id="${row.id}" id="status(${row.id})"
                                 class="custom-control-input status" ${ row.enabled == 1 ? 'checked' : '' }
                                 onchange=selectStatus(${row.id}) >
                                 <label class="custom-control-label" for="status(${row.id})" title="{{ trans('admin.update_status') }}">
@@ -207,7 +205,7 @@
                   className: '@if (auth()->user()->can("print_users")) btn dtbtn btn-sm btn-primary @else btn dtbtn btn-sm btn-primary disabled @endif',
                   extend: 'print', attr: { 'title': '{{ trans("admin.print") }}' }
                 },
-                { extend: 'pdfHtml5', charset: "UTF-8", bom: true, 
+                { extend: 'pdfHtml5', charset: "UTF-8", bom: true,
                   className: 'btn dtbtn btn-sm btn-danger',
                   text: '<i data-feather="file"></i> PDF',
                   pageSize: 'A4', attr: { 'title': 'PDF' }

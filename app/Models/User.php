@@ -16,8 +16,7 @@ class User extends Authenticatable
 
     protected $table    = 'users';
     protected $fillable = [
-        'first_name', 'last_name', 'username', 'email', 'image',
-        'enabled', 'password', 'last_login_at', 'last_login_ip'
+        'name', 'email', 'image', 'enabled', 'password', 'last_login_at', 'last_login_ip'
     ];
     protected $appends  = ['image_path', 'full_name', 'last_login'];
     protected $hidden   = ['password', 'remember_token'];
@@ -40,10 +39,5 @@ class User extends Authenticatable
     public function getLastLoginAttribute()
     {
         return Carbon::parse($this->last_login_at)->diffForHumans(Carbon::now());
-    }
-
-    public function patients()
-    {
-        return $this->hasMany(Patient::class);
     }
 }

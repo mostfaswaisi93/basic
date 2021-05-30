@@ -180,9 +180,8 @@
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="user-nav d-sm-flex d-none">
                         <span class="user-name font-weight-bolder">
-                            {{ auth()->user()->full_name }}
+                            {{ auth()->user()->name }}
                         </span>
-                        {{-- <span class="user-status">{{ trans('admin.available') }} {{ ucfirst(auth()->user()->roles->first()->name) }}</span> --}}
                         <span class="user-status">{{ auth()->user()->roles->first()->name }}</span>
                     </div>
                     <span class="avatar">
