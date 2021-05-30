@@ -2,60 +2,48 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Jetstream\HasProfilePhoto;
-use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens;
-    use HasFactory;
-    use HasProfilePhoto;
-    use Notifiable;
-    use TwoFactorAuthenticatable;
+    use HasFactory, Notifiable, SoftDeletes, HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    protected $table    = 'users';
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'first_name', 'last_name', 'username', 'email', 'image',
+        'enabled', 'password', 'last_login_at', 'last_login_ip'
     ];
+    protected $appends  = ['image_path', 'full_name', 'last_login'];
+    protected $hidden   = ['password', 'remember_token'];
+    protected $casts    = [
+        'email_verified_at' => 'datetime', 'created_at' => 'date:Y-m-d - H:i A',
+        'updated_at' => 'date:Y-m-d - H:i A', 'last_login_at' => 'date:Y-m-d - H:i A'
+    ];
+    protected $dates    = ['created_at', 'updated_at', 'deleted_at', 'last_login_at'];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-        'two_factor_recovery_codes',
-        'two_factor_secret',
-    ];
+    public function getFullNameAttribute()
+    {
+        return ucfirst($this->first_name) . ' ' . ucfirst($this->last_name);
+    }
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function getImagePathAttribute()
+    {
+        return asset('images/users/' . $this->image);
+    }
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-        'profile_photo_url',
-    ];
+    public function getLastLoginAttribute()
+    {
+        return Carbon::parse($this->last_login_at)->diffForHumans(Carbon::now());
+    }
+
+    public function patients()
+    {
+        return $this->hasMany(Patient::class);
+    }
 }

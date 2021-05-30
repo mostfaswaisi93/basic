@@ -8,6 +8,17 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $this->call([
+            // SpatieSeeder::class,
+            // ConstantsTableSeeder::class,
+            // UsersTableSeeder::class,
+            // ServicesTableSeeder::class,
+            // DrugsTableSeeder::class,
+            // TestsTableSeeder::class,
+            // LocationsTableSeeder::class,
+            // PatientsTableSeeder::class,
+            // AppointmentsTableSeeder::class,
+            // ContactsTableSeeder::class
+        ]);
     }
 }

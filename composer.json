@@ -12,10 +12,8 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "^2.5",
         "laravel/framework": "^8.40",
-        "laravel/jetstream": "^2.3",
-        "laravel/sanctum": "^2.6",
         "laravel/tinker": "^2.5",
-        "livewire/livewire": "^2.0",
+        "laravel/ui": "^3.3",
         "mcamara/laravel-localization": "^1.6",
         "spatie/laravel-permission": "^4.0",
         "spatie/laravel-translatable": "^4.6",
@@ -35,7 +33,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/Helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
