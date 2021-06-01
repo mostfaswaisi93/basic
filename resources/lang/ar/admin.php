@@ -63,13 +63,9 @@ return [
     'updated_successfully'      => 'تم تحديث البيانات بنجاح',
     'deleted_successfully'      => 'تم حذف البيانات بنجاح',
 
-    'create_service'            => 'إضافة خدمة جديدة',
-    'create_constant'           => 'إضافة ثابت جديد',
     'create_role'               => 'إضافة دور جديد',
     'create_user'               => 'إضافة مستخدم جديد',
 
-    'edit_service'              => 'تعديل بيانات الخدمة',
-    'edit_constant'             => 'تعديل بيانات الثابت',
     'edit_role'                 => 'تعديل بيانات الدور',
     'edit_user'                 => 'تعديل بيانات المستخدم',
 
@@ -106,7 +102,6 @@ return [
     'status_changed'            => 'تم تحديث الحالة بنجاح',
     'status_not_changed'        => 'الحالة لم يتم تحديثها',
 
-    'services'                  => 'الخدمات',
     'contacts'                  => 'رسائل تواصل معنا',
     'system_constants'          => 'ثوابت النظام',
     'constants'                 => 'الثوابت',
@@ -119,7 +114,6 @@ return [
     'users_management'          => 'إدارة المستخدمين',
     'users_count'               => 'عدد المستخدمين',
 
-    'service'                   => 'الخدمة',
     'constant'                  => 'الثابت',
     'role'                      => 'دور',
     'user'                      => 'مستخدم',

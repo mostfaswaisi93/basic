@@ -85,7 +85,7 @@
                     }
                 }
             ],
-            "columnDefs": [ 
+            "columnDefs": [
             {
                 // Checkboxes
                 "targets": 0,
@@ -136,7 +136,7 @@
                   className: '@if (auth()->user()->can("print_roles")) btn dtbtn btn-sm btn-primary @else btn dtbtn btn-sm btn-primary disabled @endif',
                   extend: 'print', attr: { 'title': '{{ trans("admin.print") }}' }
                 },
-                { extend: 'pdfHtml5', charset: "UTF-8", bom: true, 
+                { extend: 'pdfHtml5', charset: "UTF-8", bom: true,
                   className: 'btn dtbtn btn-sm btn-danger',
                   text: '<i data-feather="file"></i> PDF',
                   pageSize: 'A4', attr: { 'title': 'PDF' }

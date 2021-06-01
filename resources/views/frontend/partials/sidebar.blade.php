@@ -103,7 +103,7 @@
                     <li {{ request()->route()->getName() === 'admin.roles.index' ? 'class=active' : '' }}>
                         <a href="{{ route('admin.roles.index') }}" class="d-flex align-items-center">
                             <i data-feather="sliders"></i>
-                            <span class="menu-title text-truncate">{{ trans('admin.roles') }}</span>
+                            <span class="menu-title text-truncate">{{ trans('admin.per_roles') }}</span>
                         </a>
                     </li>
                     @endif

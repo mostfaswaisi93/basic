@@ -3,16 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Category extends Model
+class Category extends BaseModel
 {
-    use HasFactory, SoftDeletes;
-    protected $fillable = [
-        'user_id',
-        'category_name',
-    ];
+    use HasFactory, HasTranslations;
+
+    protected $table        = 'categories';
+    protected $fillable     = ['category_name', 'user_id', 'enabled'];
+    protected $appends      = ['name_trans'];
+    public $translatable    = ['name'];
 
     public function user()
     {

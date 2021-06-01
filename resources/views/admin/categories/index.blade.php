@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title') {{ trans('admin.services') }} @endsection
+@section('title') {{ trans('admin.categories') }} @endsection
 
 @section('content')
 
@@ -9,7 +9,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header border-bottom">
-                        <h4 class="card-title"><b>{{ trans('admin.services') }}</b></h4>
+                        <h4 class="card-title"><b>{{ trans('admin.categories') }}</b></h4>
                     </div>
                     <div class="card-body mt-2">
                         <form>
@@ -52,7 +52,7 @@
                 </div>
             </div>
         </div>
-        @include('admin.services.modal')
+        @include('admin.categories.modal')
     </section>
 </div>
 
@@ -65,7 +65,7 @@
 @include('partials.multi_delete')
 
 <script type="text/javascript">
-    var getLocation = "services";
+    var getLocation = "categories";
     $(document).ready(function(){
         // DataTable
         $('#data-table').DataTable({
@@ -75,7 +75,7 @@
             drawCallback: function(settings){ feather.replace(); },
             order: [[ 2, "desc" ]],
             ajax: {
-                url: "{{ route('admin.services.index') }}",
+                url: "{{ route('admin.categories.index') }}",
             },
             columns: [
                 { data: 'id' },
@@ -93,14 +93,14 @@
                         // Action Buttons
                         return (
                             '<span>' +
-                                '@if(auth()->user()->can('update_services'))' +
-                                    '<a id="'+ row.id +'" name="edit" class="item-edit edit mr-1" data-toggle="modal" data-target="#serviceModal" title="{{ trans("admin.edit") }}">' +
+                                '@if(auth()->user()->can('update_categories'))' +
+                                    '<a id="'+ row.id +'" name="edit" class="item-edit edit mr-1" data-toggle="modal" data-target="#categoryModal" title="{{ trans("admin.edit") }}">' +
                                     feather.icons['edit'].toSvg({ class: 'font-small-4' }) +
                                     '</a>' +
                                 '@endif' +
                             '</span>' +
                             '<span>' +
-                                '@if(auth()->user()->can('delete_services'))' +
+                                '@if(auth()->user()->can('delete_categories'))' +
                                     '<a id="'+ row.id +'" class="item-edit delete" title="{{ trans("admin.delete") }}">' +
                                     feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' }) +
                                     '</a>' +
@@ -110,7 +110,7 @@
                     }
                 }
             ],
-            "columnDefs": [ 
+            "columnDefs": [
             {
                 // Checkboxes
                 "targets": 0,
@@ -138,7 +138,7 @@
                     var $checked = $(`
                         <div class="custom-switch-status">
                             <div class="custom-control custom-switch custom-switch-success">
-                                <input type="checkbox" data-id="${row.id}" id="status(${row.id})" 
+                                <input type="checkbox" data-id="${row.id}" id="status(${row.id})"
                                 class="custom-control-input status" ${ row.enabled == 1 ? 'checked' : '' }
                                 onchange=selectStatus(${row.id}) >
                                 <label class="custom-control-label" for="status(${row.id})" title="{{ trans('admin.update_status') }}">
@@ -164,7 +164,7 @@
                     }
                 },
                 { text: '<i data-feather="trash-2"></i> {{ trans("admin.trash") }}',
-                  className: '@if (auth()->user()->can("trash_services")) btn dtbtn btn-sm btn-danger multi_delete @else btn dtbtn btn-sm btn-danger disabled @endif',
+                  className: '@if (auth()->user()->can("trash_categories")) btn dtbtn btn-sm btn-danger multi_delete @else btn dtbtn btn-sm btn-danger disabled @endif',
                   attr: { 'title': '{{ trans("admin.trash") }}' }
                 },
                 { extend: 'csvHtml5', charset: "UTF-8", bom: true,
@@ -178,22 +178,22 @@
                   attr: { 'title': 'Excel' }
                 },
                 { text: '<i data-feather="printer"></i> {{ trans("admin.print") }}',
-                  className: '@if (auth()->user()->can("print_services")) btn dtbtn btn-sm btn-primary @else btn dtbtn btn-sm btn-primary disabled @endif',
+                  className: '@if (auth()->user()->can("print_categories")) btn dtbtn btn-sm btn-primary @else btn dtbtn btn-sm btn-primary disabled @endif',
                   extend: 'print', attr: { 'title': '{{ trans("admin.print") }}' }
                 },
-                { extend: 'pdfHtml5', charset: "UTF-8", bom: true, 
+                { extend: 'pdfHtml5', charset: "UTF-8", bom: true,
                   className: 'btn dtbtn btn-sm btn-danger',
                   text: '<i data-feather="file"></i> PDF',
                   pageSize: 'A4', attr: { 'title': 'PDF' }
                 },
-                { text: '<i data-feather="plus"></i> {{ trans("admin.create_service") }}',
-                  className: '@if (auth()->user()->can("create_services")) btn dtbtn btn-sm btn-primary @else btn dtbtn btn-sm btn-primary disabled @endif',
+                { text: '<i data-feather="plus"></i> {{ trans("admin.create_category") }}',
+                  className: '@if (auth()->user()->can("create_categories")) btn dtbtn btn-sm btn-primary @else btn dtbtn btn-sm btn-primary disabled @endif',
                   attr: {
-                    'title': '{{ trans("admin.create_service") }}',
+                    'title': '{{ trans("admin.create_category") }}',
                     'data-toggle': 'modal',
-                    'data-target': '#serviceModal',
-                    'name': 'create_service',
-                    'id': 'create_service' }
+                    'data-target': '#categoryModal',
+                    'name': 'create_category',
+                    'id': 'create_category' }
                 },
             ],
             language: {
@@ -204,22 +204,22 @@
         });
 
         // Open Modal
-        $(document).on('click', '#create_service', function(){
-            $('.modal-title').text("{{ trans('admin.create_service') }}");
+        $(document).on('click', '#create_category', function(){
+            $('.modal-title').text("{{ trans('admin.create_category') }}");
             $('#action_button').val("Add");
-            $('#serviceForm').trigger("reset");
+            $('#categoryForm').trigger("reset");
             $('#form_result').html('');
             $('#action').val("Add");
         });
 
         // Add Data
-        $('#serviceForm').on('submit', function(event){
+        $('#categoryForm').on('submit', function(event){
             event.preventDefault();
             if($('#action').val() == 'Add')
             {
                 var formData = new FormData(this);
                 $.ajax({
-                    url: "{{ route('admin.services.store') }}",
+                    url: "{{ route('admin.categories.store') }}",
                     method: "POST",
                     data: formData,
                     contentType: false,
@@ -240,7 +240,7 @@
                     }
                     if(data.success)
                     {
-                        $('#serviceForm')[0].reset();
+                        $('#categoryForm')[0].reset();
                         $('#data-table').DataTable().ajax.reload();
                         $("[data-dismiss=modal]").trigger({ type: "click" });
                         var lang = "{{ app()->getLocale() }}";
@@ -258,7 +258,7 @@
             {
                 var formData = new FormData(this);
                 $.ajax({
-                    url: "{{ route('admin.services.update') }}",
+                    url: "{{ route('admin.categories.update') }}",
                     method: "POST",
                     data: formData,
                     contentType: false,
@@ -279,7 +279,7 @@
                     }
                     if(data.success)
                     {
-                        $('#serviceForm')[0].reset();
+                        $('#categoryForm')[0].reset();
                         $('#data-table').DataTable().ajax.reload();
                         $("[data-dismiss=modal]").trigger({ type: "click" });
                         var lang = "{{ app()->getLocale() }}";
@@ -300,14 +300,14 @@
             var id = $(this).attr('id');
             $('#form_result').html('');
             $.ajax({
-                url: "/admin/services/"+ id +"/edit",
+                url: "/admin/categories/"+ id +"/edit",
                 dataType: "json",
                 success: function(html){
                     $('#name_ar').val(html.data.name.ar);
                     $('#name_en').val(html.data.name.en);
                     $('#price').val(html.data.price);
                     $('#hidden_id').val(html.data.id);
-                    $('.modal-title').text("{{ trans('admin.edit_service') }}");
+                    $('.modal-title').text("{{ trans('admin.edit_category') }}");
                     $('#action_button').val("Edit");
                     $('#action').val("Edit");
                 }

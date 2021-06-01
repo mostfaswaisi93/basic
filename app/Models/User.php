@@ -18,7 +18,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email', 'image', 'enabled', 'password', 'last_login_at', 'last_login_ip'
     ];
-    protected $appends  = ['image_path', 'full_name', 'last_login'];
+    protected $appends  = ['image_path', 'last_login'];
     protected $hidden   = ['password', 'remember_token'];
     protected $casts    = [
         'email_verified_at' => 'datetime', 'created_at' => 'date:Y-m-d - H:i A',
@@ -26,10 +26,11 @@ class User extends Authenticatable
     ];
     protected $dates    = ['created_at', 'updated_at', 'deleted_at', 'last_login_at'];
 
-    public function getFullNameAttribute()
-    {
-        return ucfirst($this->first_name) . ' ' . ucfirst($this->last_name);
-    }
+    // public function getNameAttribute($value)
+    // {
+    //     $word = str_replace('_', ' ', $value);
+    //     return ucwords($word);
+    // }
 
     public function getImagePathAttribute()
     {

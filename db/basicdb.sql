@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 30, 2021 at 10:32 PM
+-- Generation Time: Jun 01, 2021 at 01:05 PM
 -- Server version: 10.5.4-MariaDB-log
--- PHP Version: 7.4.10
+-- PHP Version: 7.4.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -40,9 +40,11 @@ CREATE TABLE `brands` (
 --
 
 CREATE TABLE `categories` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `category_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `enabled` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -124,15 +126,14 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (2, '2014_10_12_100000_create_password_resets_table', 1),
 (3, '2019_08_19_000000_create_failed_jobs_table', 1),
 (4, '2021_05_25_001634_create_permission_tables', 1),
-(5, '2021_05_25_140419_create_services_table', 1),
-(6, '2021_05_25_140501_create_settings_table', 1),
-(7, '2021_05_25_140511_create_contacts_table', 1),
-(8, '2021_05_30_190010_create_categories_table', 1),
-(9, '2021_05_31_011649_create_brands_table', 1),
-(10, '2021_05_31_011748_create_multipics_table', 1),
-(11, '2021_05_31_011802_create_sliders_table', 1),
-(12, '2021_05_31_011816_create_home_abouts_table', 1),
-(13, '2021_05_31_011843_create_contact_forms_table', 1);
+(5, '2021_05_25_140501_create_settings_table', 1),
+(6, '2021_05_25_140511_create_contacts_table', 1),
+(7, '2021_05_30_190010_create_categories_table', 1),
+(8, '2021_05_31_011649_create_brands_table', 1),
+(9, '2021_05_31_011748_create_multipics_table', 1),
+(10, '2021_05_31_011802_create_sliders_table', 1),
+(11, '2021_05_31_011816_create_home_abouts_table', 1),
+(12, '2021_05_31_011843_create_contact_forms_table', 1);
 
 -- --------------------------------------------------------
 
@@ -208,24 +209,24 @@ CREATE TABLE `permissions` (
 --
 
 INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
-(1, 'create_users', 'web', '2021-05-30 22:31:52', '2021-05-30 22:31:52'),
-(2, 'read_users', 'web', '2021-05-30 22:31:52', '2021-05-30 22:31:52'),
-(3, 'update_users', 'web', '2021-05-30 22:31:52', '2021-05-30 22:31:52'),
-(4, 'delete_users', 'web', '2021-05-30 22:31:52', '2021-05-30 22:31:52'),
-(5, 'print_users', 'web', '2021-05-30 22:31:52', '2021-05-30 22:31:52'),
-(6, 'trash_users', 'web', '2021-05-30 22:31:52', '2021-05-30 22:31:52'),
-(7, 'create_roles', 'web', '2021-05-30 22:31:52', '2021-05-30 22:31:52'),
-(8, 'read_roles', 'web', '2021-05-30 22:31:52', '2021-05-30 22:31:52'),
-(9, 'update_roles', 'web', '2021-05-30 22:31:52', '2021-05-30 22:31:52'),
-(10, 'delete_roles', 'web', '2021-05-30 22:31:52', '2021-05-30 22:31:52'),
-(11, 'print_roles', 'web', '2021-05-30 22:31:52', '2021-05-30 22:31:52'),
-(12, 'trash_roles', 'web', '2021-05-30 22:31:52', '2021-05-30 22:31:52'),
-(13, 'create_settings', 'web', '2021-05-30 22:31:52', '2021-05-30 22:31:52'),
-(14, 'read_settings', 'web', '2021-05-30 22:31:52', '2021-05-30 22:31:52'),
-(15, 'update_settings', 'web', '2021-05-30 22:31:52', '2021-05-30 22:31:52'),
-(16, 'delete_settings', 'web', '2021-05-30 22:31:52', '2021-05-30 22:31:52'),
-(17, 'print_settings', 'web', '2021-05-30 22:31:52', '2021-05-30 22:31:52'),
-(18, 'trash_settings', 'web', '2021-05-30 22:31:52', '2021-05-30 22:31:52');
+(1, 'create_users', 'web', '2021-05-31 11:38:40', '2021-05-31 11:38:40'),
+(2, 'read_users', 'web', '2021-05-31 11:38:40', '2021-05-31 11:38:40'),
+(3, 'update_users', 'web', '2021-05-31 11:38:40', '2021-05-31 11:38:40'),
+(4, 'delete_users', 'web', '2021-05-31 11:38:40', '2021-05-31 11:38:40'),
+(5, 'print_users', 'web', '2021-05-31 11:38:40', '2021-05-31 11:38:40'),
+(6, 'trash_users', 'web', '2021-05-31 11:38:40', '2021-05-31 11:38:40'),
+(7, 'create_roles', 'web', '2021-05-31 11:38:40', '2021-05-31 11:38:40'),
+(8, 'read_roles', 'web', '2021-05-31 11:38:40', '2021-05-31 11:38:40'),
+(9, 'update_roles', 'web', '2021-05-31 11:38:40', '2021-05-31 11:38:40'),
+(10, 'delete_roles', 'web', '2021-05-31 11:38:40', '2021-05-31 11:38:40'),
+(11, 'print_roles', 'web', '2021-05-31 11:38:40', '2021-05-31 11:38:40'),
+(12, 'trash_roles', 'web', '2021-05-31 11:38:40', '2021-05-31 11:38:40'),
+(13, 'create_settings', 'web', '2021-05-31 11:38:41', '2021-05-31 11:38:41'),
+(14, 'read_settings', 'web', '2021-05-31 11:38:41', '2021-05-31 11:38:41'),
+(15, 'update_settings', 'web', '2021-05-31 11:38:41', '2021-05-31 11:38:41'),
+(16, 'delete_settings', 'web', '2021-05-31 11:38:41', '2021-05-31 11:38:41'),
+(17, 'print_settings', 'web', '2021-05-31 11:38:41', '2021-05-31 11:38:41'),
+(18, 'trash_settings', 'web', '2021-05-31 11:38:41', '2021-05-31 11:38:41');
 
 -- --------------------------------------------------------
 
@@ -246,7 +247,8 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
-(1, 'super_admin', 'web', '2021-05-30 22:31:52', '2021-05-30 22:31:52');
+(1, 'super_admin', 'web', '2021-05-31 11:38:40', '2021-05-31 11:38:40'),
+(2, 'admin', 'web', '2021-05-31 11:38:42', '2021-05-31 11:38:42');
 
 -- --------------------------------------------------------
 
@@ -282,21 +284,6 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (16, 1),
 (17, 1),
 (18, 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `services`
---
-
-CREATE TABLE `services` (
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `price` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `enabled` int(11) NOT NULL DEFAULT 1,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -352,7 +339,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `image`, `enabled`, `email_verified_at`, `password`, `remember_token`, `last_login_at`, `last_login_ip`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'super_admin', 'super@admin.com', 'default.png', 1, NULL, '$2y$10$rx4NosTrYMq50n7gbXI0peN4SXBtk8MiL3cw/sAf0ZDhgtFjChuiK', NULL, '2021-05-30 22:31:53', NULL, '2021-05-30 21:00:00', '2021-05-30 21:00:00', NULL);
+(1, 'super_admin', 'super@admin.com', 'default.png', 1, NULL, '$2y$10$ZlES0a9vlkOdt.TGsyy01uA.Y3jNtd/A3NzfHShvMe8RCx2orvfAy', NULL, '2021-05-31 12:24:01', '127.0.0.1', '2021-05-30 21:00:00', '2021-05-31 12:24:02', NULL);
 
 --
 -- Indexes for dumped tables
@@ -362,12 +349,6 @@ INSERT INTO `users` (`id`, `name`, `email`, `image`, `enabled`, `email_verified_
 -- Indexes for table `brands`
 --
 ALTER TABLE `brands`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `categories`
---
-ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -478,12 +459,6 @@ ALTER TABLE `brands`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `categories`
---
-ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `contacts`
 --
 ALTER TABLE `contacts`
@@ -511,7 +486,7 @@ ALTER TABLE `home_abouts`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `multipics`
@@ -529,7 +504,7 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `settings`

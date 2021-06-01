@@ -19,7 +19,7 @@
                 cancelButtonColor: '#d33',
                 confirmButtonText: '{{ trans('admin.yes') }}',
                 cancelButtonText: '{{ trans('admin.cancel') }}'
-            }) 
+            })
         } else {
             swalAlert = swal({
                 title: "{{ trans('admin.no_multi_data') }}",

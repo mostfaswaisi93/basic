@@ -11,7 +11,7 @@
                     <div class="card-header">
                         <h4 class="card-title">
                             <i class="feather icon-edit mr-25"></i>
-                            {{ trans('admin.edit_user') }} - {{ $user->full_name }}
+                            {{ trans('admin.edit_user') }} - {{ $user->name }}
                         </h4>
                     </div>
                     <div class="card-content">
@@ -20,7 +20,7 @@
                             <form action="{{ route('admin.users.update', $user->id) }}" method="post"
                                 enctype="multipart/form-data">
                                 @csrf
-                                @method('PUT')
+                                @method('put')
                                 <div class="row">
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">

@@ -10,10 +10,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             SpatieSeeder::class,
-            // ConstantsTableSeeder::class,
             UsersTableSeeder::class,
-            // ServicesTableSeeder::class,
-            // ContactsTableSeeder::class
+            // ContactsTableSeeder::class,
+            // CategoriesTableSeeder::class
         ]);
     }
 }

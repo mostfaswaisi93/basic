@@ -1,7 +1,7 @@
-<!-- Service Modal -->
-<div class="modal modal-slide-in fade" id="serviceModal" role="dialog" aria-hidden="true">
+<!-- Category Modal -->
+<div class="modal modal-slide-in fade" id="categoryModal" role="dialog" aria-hidden="true">
     <div class="modal-dialog sidebar-sm">
-        <form method="POST" class="add-new-record modal-content pt-0" id="serviceForm" enctype="multipart/form-data">
+        <form method="POST" class="add-new-record modal-content pt-0" id="categoryForm" enctype="multipart/form-data">
             @csrf
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
             <div class="modal-header mb-1">

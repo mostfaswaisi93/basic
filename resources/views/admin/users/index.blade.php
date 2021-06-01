@@ -40,7 +40,7 @@
                                     <th></th>
                                     <th>#</th>
                                     <th class="image">{{ trans('admin.image') }}</th>
-                                    <th>{{ trans('admin.data') }}</th>
+                                    <th>{{ trans('admin.name') }}</th>
                                     <th class="status">{{ trans('admin.status') }}</th>
                                     <th>{{ trans('admin.last_login') }}</th>
                                     <th>{{ trans('admin.created_at') }}</th>
@@ -53,7 +53,6 @@
                 </div>
             </div>
         </div>
-        @include('admin.users.modal')
     </section>
 </div>
 
@@ -90,12 +89,7 @@
                         return "<img src=" + data + " width='50px' class='img-thumbnail' />";
                     }, searchable: false, orderable: false
                 },
-                { data: 'full_name',
-                    render: function(data, type, row, meta){
-                        var text = "<div><b>{{ trans('admin.name') }}: </b>"+ row.name +" - </div>";
-                        return text;
-                    }
-                },
+                { data: 'name' },
                 { data: 'enabled' },
                 { data: 'last_login_at', className: 'last_login_at',
                     render: function(data, type, row, meta){
@@ -214,10 +208,13 @@
                   className: '@if (auth()->user()->can("create_users")) btn dtbtn btn-sm btn-primary @else btn dtbtn btn-sm btn-primary disabled @endif',
                   attr: {
                     'title': '{{ trans("admin.create_user") }}',
-                    'data-toggle': 'modal',
-                    'data-target': '#userModal',
-                    'name': 'create_user',
-                    'id': 'create_user' }
+                    href: '{{ route("admin.users.create") }}'
+                     },
+                    action: function (e, dt, node, config)
+                    {
+                        // href location
+                        window.location.href = '{{ route("admin.users.create") }}';
+                    }
                 },
             ],
             language: {
