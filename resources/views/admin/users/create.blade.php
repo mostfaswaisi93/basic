@@ -42,18 +42,41 @@
                                 @csrf
                                 @method('post')
                                 <div class="row mt-1">
-                                    <div class="col-xl-6 col-md-6 col-12">
+                                    <div class="col-xl-4 col-md-4 col-12">
                                         <div class="form-group">
-                                            <label for="name">{{ trans('admin.name') }}:</label>
-                                            <input type="text" id="name" name="name" class="form-control"
-                                                value="{{ old('name') }}" placeholder="{{ trans('admin.name') }}">
+                                            <label>{{ trans('admin.first_name') }}</label>
+                                            <input id="first_name" type="text" name="first_name" class="form-control"
+                                                value="{{ old('first_name') }}"
+                                                placeholder="{{ trans('admin.first_name') }}">
                                         </div>
                                     </div>
-                                    <div class="col-xl-6 col-md-6 col-12">
+                                    <div class="col-xl-4 col-md-4 col-12">
+                                        <div class="form-group">
+                                            <label>{{ trans('admin.last_name') }}</label>
+                                            <input id="last_name" type="text" name="last_name" class="form-control"
+                                                value="{{ old('last_name') }}"
+                                                placeholder="{{ trans('admin.last_name') }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-md-4 col-12">
                                         <div class="form-group">
                                             <label for="email">{{ trans('admin.email') }}:</label>
                                             <input id="email" type="email" name="email" class="form-control"
                                                 value="{{ old('email') }}" placeholder="{{ trans('admin.email') }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-md-4 col-12">
+                                        <div class="form-group">
+                                            <label for="role_id">{{ trans('admin.role') }}:</label>
+                                            <select name="role_id" class="form-control">
+                                                <option value="" selected="selected">@lang('admin.all_roles')</option>
+                                                @foreach ($roles as $role)
+                                                <option value="{{ $role->id }}"
+                                                    {{ old('role_id') == $role->id ? 'selected' : '' }}>
+                                                    {{ $role->name }}
+                                                </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-xl-4 col-md-4 col-12">
@@ -71,16 +94,6 @@
                                                 placeholder="{{ trans('admin.password_confirmation') }}">
                                         </div>
                                     </div>
-                                    {{-- <div class="col-xl-4 col-md-4 col-12">
-                                        <div class="form-group">
-                                            <label for="role">Role:</label>
-                                            <select class="form-control" id="role">
-                                                <option>Admin</option>
-                                                <option>User</option>
-                                                <option>Staff</option>
-                                            </select>
-                                        </div>
-                                    </div> --}}
                                     <div class="col-12">
                                         <div class="media mb-2">
                                             <img src="{{ asset('images/users/default.png') }}" alt="users avatar"

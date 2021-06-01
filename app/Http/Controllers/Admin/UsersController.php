@@ -3,13 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Intervention\Image\Facades\Image;
-use Validator;
+use Spatie\Permission\Models\Role as SpatieRole;
+
 class UsersController extends Controller
 {
     public function __construct()
@@ -24,10 +26,7 @@ class UsersController extends Controller
     {
         // $users = User::OrderBy('created_at', 'desc')->role('admin');
         $users = User::OrderBy('created_at', 'desc');
-        $enabled = request()->get('enabled');
         if (request()->ajax()) {
-            if (isset($enabled))
-                $users->where('enabled', $enabled)->get();
             $users = $users->get();
             return datatables()->of($users)->make(true);
         }
@@ -36,65 +35,37 @@ class UsersController extends Controller
 
     public function create()
     {
-        return view('admin.users.create');
+        $roles = Role::all();
+        return view('admin.users.create', compact('roles'));
     }
-
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'name'          => 'required',
-    //         'email'         => 'required|unique:users',
-    //         'image'         => 'image',
-    //         'password'      => 'required|confirmed',
-    //         'permissions'   => 'required|min:1'
-    //     ]);
-
-    //     $request_data = $request->except(['password', 'password_confirmation', 'permissions', 'image']);
-    //     $request_data['password'] = bcrypt($request->password);
-
-    //     if ($request->image) {
-    //         Image::make($request->image)
-    //             ->resize(300, null, function ($constraint) {
-    //                 $constraint->aspectRatio();
-    //             })
-    //             ->save(public_path('uploads/user_images/' . $request->image->hashName()));
-    //         $request_data['image'] = $request->image->hashName();
-    //     }
-
-    //     $user = User::create($request_data);
-    //     $user->assignRole('admin');
-    //     $user->syncPermissions($request->permissions);
-
-    //     session()->flash('success', __('site.added_successfully'));
-    //     return redirect()->route('admin.users.index');
-    // }
 
     public function store(Request $request)
     {
-        $rules = array(
-            'name'          =>  'required',
-            'email'         =>  'required|unique:users',
-            'image'         =>  'image',
-            'password'      =>  'required|confirmed',
-            'permissions'   =>  'required|min:1'
-        );
+        $request->validate([
+            'first_name'    => 'required',
+            'last_name'     => 'required',
+            'email'         => 'required|unique:users',
+            'image'         => 'image',
+            'password'      => 'required|confirmed',
+            'permissions'   => 'required|min:1',
+            'role_id'       => 'required'
+        ]);
 
-        $error = Validator::make($request->all(), $rules);
-
-        if ($error->fails()) {
-            return response()->json(['errors' => $error->errors()->all()]);
-        }
-
-        $request_data = array(
-            'name'       =>   $request->name,
-            'email'      =>   $request->email
-        );
-
-        $request_data = $request->except(['password', 'password_confirmation', 'permissions', 'image']);
+        $request_data = $request->except(['password', 'password_confirmation', 'permissions', 'image', 'role_id']);
         $request_data['password'] = bcrypt($request->password);
 
+        if ($request->image) {
+            Image::make($request->image)
+                ->resize(300, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })
+                ->save(public_path('images/users/' . $request->image->hashName()));
+            $request_data['image'] = $request->image->hashName();
+        }
+
         $user = User::create($request_data);
-        $user->assignRole('admin');
+        $user->assignRole($request->role_id);
+        $user->syncPermissions($request->permissions);
 
         if (app()->getLocale() == 'ar') {
             Toastr::success(__('admin.added_successfully'));
@@ -161,17 +132,5 @@ class UsersController extends Controller
         $ids = $request->ids;
         User::whereIn('id', explode(",", $ids))->delete();
         return response()->json(['success' => 'The Data has been Deleted Successfully.']);
-    }
-
-    public function updateStatus(Request $request, $id)
-    {
-        $user           = User::find($id);
-        $enabled        = $request->get('enabled');
-        $user->enabled  = $enabled;
-        $user           = $user->save();
-
-        if ($user) {
-            return response(['success' => true, "message" => 'Status has been Successfully Updated.']);
-        }
     }
 }

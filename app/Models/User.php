@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -16,9 +17,10 @@ class User extends Authenticatable
 
     protected $table    = 'users';
     protected $fillable = [
-        'name', 'email', 'image', 'enabled', 'password', 'last_login_at', 'last_login_ip'
+        'first_name', 'last_name', 'email', 'image', 'enabled', 'password',
+        'last_login_at', 'last_login_ip'
     ];
-    protected $appends  = ['image_path', 'last_login'];
+    protected $appends  = ['image_path', 'full_name', 'last_login', 'created_at_before'];
     protected $hidden   = ['password', 'remember_token'];
     protected $casts    = [
         'email_verified_at' => 'datetime', 'created_at' => 'date:Y-m-d - H:i A',
@@ -26,15 +28,24 @@ class User extends Authenticatable
     ];
     protected $dates    = ['created_at', 'updated_at', 'deleted_at', 'last_login_at'];
 
-    // public function getNameAttribute($value)
-    // {
-    //     $word = str_replace('_', ' ', $value);
-    //     return ucwords($word);
-    // }
+    public function role()
+    {
+        return $this->hasOne(Role::class, 'id', 'role_id');
+    }
+
+    public function getFullNameAttribute()
+    {
+        return ucfirst($this->first_name) . ' ' . ucfirst($this->last_name);
+    }
 
     public function getImagePathAttribute()
     {
         return asset('images/users/' . $this->image);
+    }
+
+    public function getCreatedAtBeforeAttribute()
+    {
+        return Carbon::parse($this->created_at)->diffForHumans(Carbon::now());
     }
 
     public function getLastLoginAttribute()

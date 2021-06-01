@@ -180,7 +180,7 @@
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="user-nav d-sm-flex d-none">
                         <span class="user-name font-weight-bolder">
-                            {{ auth()->user()->name }}
+                            {{ auth()->user()->full_name }}
                         </span>
                         <span class="user-status">{{ auth()->user()->roles->first()->name }}</span>
                     </div>

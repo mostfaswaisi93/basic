@@ -158,6 +158,7 @@ return [
     'no_messages'               => 'No Messages',
     'read_all_messages'         => 'Read All Messages',
     'read_all_notifications'    => 'Read All Notifications',
+    'all_roles'                 => 'All Roles',
 
     'ar'                        => [
         'name'          => 'Name in Arabic',

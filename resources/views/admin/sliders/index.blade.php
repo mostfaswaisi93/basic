@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title') {{ trans('admin.users') }} @endsection
+@section('title') {{ trans('admin.sliders') }} @endsection
 
 @section('content')
 
@@ -9,8 +9,28 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header border-bottom">
-                        <h4 class="card-title"><b>{{ trans('admin.users') }}</b></h4>
+                        <h4 class="card-title"><b>{{ trans('admin.sliders') }}</b></h4>
                     </div>
+                    <div class="card-body mt-2">
+                        <form>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-row mb-1">
+                                        <div class="col-lg-2">
+                                            <label for="filterStatus">{{ trans('admin.status') }}:</label>
+                                            <select id="filterStatus" class="form-control"
+                                                onchange="filter_status(this);">
+                                                <option value="" selected="selected">{{ trans('admin.all') }}</option>
+                                                <option value='1'>{{ trans('admin.active') }}</option>
+                                                <option value='0'>{{ trans('admin.inactive') }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <hr class="my-0" />
                     <div class="table-responsive" style="padding: 10px">
                         <table id="data-table"
                             class="table table-striped table-bordered table-hover table-sm dt-responsive nowrap"
@@ -19,9 +39,9 @@
                                 <tr>
                                     <th></th>
                                     <th>#</th>
-                                    <th class="image">{{ trans('admin.image') }}</th>
-                                    <th>{{ trans('admin.data') }}</th>
-                                    <th>{{ trans('admin.last_login') }}</th>
+                                    <th>{{ trans('admin.name') }}</th>
+                                    <th>{{ trans('admin.price') }}</th>
+                                    <th class="status">{{ trans('admin.status') }}</th>
                                     <th>{{ trans('admin.created_at') }}</th>
                                     <th>{{ trans('admin.actions') }}</th>
                                 </tr>
@@ -32,6 +52,7 @@
                 </div>
             </div>
         </div>
+        @include('admin.sliders.modal')
     </section>
 </div>
 
@@ -40,10 +61,11 @@
 @push('scripts')
 
 @include('partials.delete')
+@include('partials.status')
 @include('partials.multi_delete')
 
 <script type="text/javascript">
-    var getLocation = "users";
+    var getLocation = "sliders";
     $(document).ready(function(){
         // DataTable
         $('#data-table').DataTable({
@@ -51,9 +73,9 @@
             serverSide: true,
             responsive: true,
             drawCallback: function(settings){ feather.replace(); },
-            order: [[ 3, "desc" ]],
+            order: [[ 2, "desc" ]],
             ajax: {
-                url: "{{ route('admin.users.index') }}",
+                url: "{{ route('admin.sliders.index') }}",
             },
             columns: [
                 { data: 'id' },
@@ -62,52 +84,23 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }, searchable: false, orderable: false
                 },
-                { data: 'image_path',
-                    render: function(data, type, row, meta) {
-                        return "<img src=" + data + " width='50px' class='img-thumbnail' />";
-                    }, searchable: false, orderable: false
-                },
-                { data: 'full_name',
-                    render: function(data, type, row, meta){
-                        var text1 = "<div><b>{{ trans('admin.full_name') }}: </b>"+ row.full_name +" - </div>";
-                        var text2 = "<div><b>{{ trans('admin.email') }}: </b>"+ row.email +"</div>";
-                        return text1 + text2;
-                    }
-                },
-                { data: 'last_login_at', className: 'last_login_at',
-                    render: function(data, type, row, meta){
-                        var text1 = "<div>"+ data +" - </div>";
-                        var text2 = "<div>"+ row.last_login +"</div>";
-                        return text1 + text2;
-                    }
-                },
-                { data: 'created_at', className: 'created_at',
-                    render: function(data, type, row, meta){
-                        var text1 = "<div>"+ data +" - </div>";
-                        var text2 = "<div>"+ row.created_at_before +"</div>";
-                        return text1 + text2;
-                    }
-                },
+                { data: 'name_trans' },
+                { data: 'price' },
+                { data: 'enabled' },
+                { data: 'created_at', className: 'created_at' },
                 { data: 'action', orderable: false,
                     render: function(data, type, row, meta) {
                         // Action Buttons
                         return (
                             '<span>' +
-                                '@if(auth()->user()->can('update_users'))' +
-                                    '<a id="'+ row.id +'" name="edit" class="item-edit edit mr-1" data-toggle="modal" data-target="#userModal" title="{{ trans("admin.edit") }}">' +
+                                '@if(auth()->user()->can('update_sliders'))' +
+                                    '<a id="'+ row.id +'" name="edit" class="item-edit edit mr-1" data-toggle="modal" data-target="#sliderModal" title="{{ trans("admin.edit") }}">' +
                                     feather.icons['edit'].toSvg({ class: 'font-small-4' }) +
                                     '</a>' +
                                 '@endif' +
                             '</span>' +
                             '<span>' +
-                                '@if(auth()->user()->can('read_users'))' +
-                                    '<a id="'+ row.id +'" name="show" class="item-edit show mr-1" data-toggle="modal" data-target="#userModal" title="{{ trans("admin.show") }}">' +
-                                    feather.icons['eye'].toSvg({ class: 'font-small-4' }) +
-                                    '</a>' +
-                                '@endif' +
-                            '</span>' +
-                            '<span>' +
-                                '@if(auth()->user()->can('delete_users'))' +
+                                '@if(auth()->user()->can('delete_sliders'))' +
                                     '<a id="'+ row.id +'" class="item-edit delete" title="{{ trans("admin.delete") }}">' +
                                     feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' }) +
                                     '</a>' +
@@ -138,6 +131,26 @@
                             '<label class="custom-control-label" for="checkboxSelectAll"></label>' +
                         '</div>'
                 }
+            },
+            {
+                "targets": 4,
+                render: function (data, type, row, meta){
+                    var $checked = $(`
+                        <div class="custom-switch-status">
+                            <div class="custom-control custom-switch custom-switch-success">
+                                <input type="checkbox" data-id="${row.id}" id="status(${row.id})"
+                                class="custom-control-input status" ${ row.enabled == 1 ? 'checked' : '' }
+                                onchange=selectStatus(${row.id}) >
+                                <label class="custom-control-label" for="status(${row.id})" title="{{ trans('admin.update_status') }}">
+                                    <span class="switch-icon-left"><i data-feather="check"></i></span>
+                                    <span class="switch-icon-right"><i data-feather="x"></i></span>
+                                </label>
+                            </div>
+                        </div>
+                    `);
+                    $checked.prop('checked', true).attr('checked', 'checked');
+                    return $checked[0].outerHTML
+                }
             } ],
             dom:  "<'row'<''l><'col-sm-8 text-center'B><''f>>" +
                   "<'row'<'col-sm-12'tr>>" +
@@ -151,7 +164,7 @@
                     }
                 },
                 { text: '<i data-feather="trash-2"></i> {{ trans("admin.trash") }}',
-                  className: '@if (auth()->user()->can("trash_users")) btn dtbtn btn-sm btn-danger multi_delete @else btn dtbtn btn-sm btn-danger disabled @endif',
+                  className: '@if (auth()->user()->can("trash_sliders")) btn dtbtn btn-sm btn-danger multi_delete @else btn dtbtn btn-sm btn-danger disabled @endif',
                   attr: { 'title': '{{ trans("admin.trash") }}' }
                 },
                 { extend: 'csvHtml5', charset: "UTF-8", bom: true,
@@ -165,7 +178,7 @@
                   attr: { 'title': 'Excel' }
                 },
                 { text: '<i data-feather="printer"></i> {{ trans("admin.print") }}',
-                  className: '@if (auth()->user()->can("print_users")) btn dtbtn btn-sm btn-primary @else btn dtbtn btn-sm btn-primary disabled @endif',
+                  className: '@if (auth()->user()->can("print_sliders")) btn dtbtn btn-sm btn-primary @else btn dtbtn btn-sm btn-primary disabled @endif',
                   extend: 'print', attr: { 'title': '{{ trans("admin.print") }}' }
                 },
                 { extend: 'pdfHtml5', charset: "UTF-8", bom: true,
@@ -173,17 +186,14 @@
                   text: '<i data-feather="file"></i> PDF',
                   pageSize: 'A4', attr: { 'title': 'PDF' }
                 },
-                { text: '<i data-feather="plus"></i> {{ trans("admin.create_user") }}',
-                  className: '@if (auth()->user()->can("create_users")) btn dtbtn btn-sm btn-primary @else btn dtbtn btn-sm btn-primary disabled @endif',
+                { text: '<i data-feather="plus"></i> {{ trans("admin.create_slider") }}',
+                  className: '@if (auth()->user()->can("create_sliders")) btn dtbtn btn-sm btn-primary @else btn dtbtn btn-sm btn-primary disabled @endif',
                   attr: {
-                    'title': '{{ trans("admin.create_user") }}',
-                    href: '{{ route("admin.users.create") }}'
-                     },
-                    action: function (e, dt, node, config)
-                    {
-                        // href location
-                        window.location.href = '{{ route("admin.users.create") }}';
-                    }
+                    'title': '{{ trans("admin.create_slider") }}',
+                    'data-toggle': 'modal',
+                    'data-target': '#sliderModal',
+                    'name': 'create_slider',
+                    'id': 'create_slider' }
                 },
             ],
             language: {
@@ -194,23 +204,22 @@
         });
 
         // Open Modal
-        $(document).on('click', '#create_user', function(){
-            $('.modal-title').text("{{ trans('admin.create_user') }}");
+        $(document).on('click', '#create_slider', function(){
+            $('.modal-title').text("{{ trans('admin.create_slider') }}");
             $('#action_button').val("Add");
-            $('#userForm').trigger("reset");
+            $('#sliderForm').trigger("reset");
             $('#form_result').html('');
-            $(".form-group.col-6.password").css("display", "unset");
             $('#action').val("Add");
         });
 
         // Add Data
-        $('#userForm').on('submit', function(event){
+        $('#sliderForm').on('submit', function(event){
             event.preventDefault();
             if($('#action').val() == 'Add')
             {
                 var formData = new FormData(this);
                 $.ajax({
-                    url: "{{ route('admin.users.store') }}",
+                    url: "{{ route('admin.sliders.store') }}",
                     method: "POST",
                     data: formData,
                     contentType: false,
@@ -231,7 +240,7 @@
                     }
                     if(data.success)
                     {
-                        $('#userForm')[0].reset();
+                        $('#sliderForm')[0].reset();
                         $('#data-table').DataTable().ajax.reload();
                         $("[data-dismiss=modal]").trigger({ type: "click" });
                         var lang = "{{ app()->getLocale() }}";
@@ -249,7 +258,7 @@
             {
                 var formData = new FormData(this);
                 $.ajax({
-                    url: "{{ route('admin.users.update') }}",
+                    url: "{{ route('admin.sliders.update') }}",
                     method: "POST",
                     data: formData,
                     contentType: false,
@@ -270,7 +279,7 @@
                     }
                     if(data.success)
                     {
-                        $('#userForm')[0].reset();
+                        $('#sliderForm')[0].reset();
                         $('#data-table').DataTable().ajax.reload();
                         $("[data-dismiss=modal]").trigger({ type: "click" });
                         var lang = "{{ app()->getLocale() }}";
@@ -291,16 +300,14 @@
             var id = $(this).attr('id');
             $('#form_result').html('');
             $.ajax({
-                url: "/admin/users/"+ id +"/edit",
+                url: "/admin/sliders/"+ id +"/edit",
                 dataType: "json",
                 success: function(html){
-                    $('#first_name').val(html.data.first_name);
-                    $('#last_name').val(html.data.last_name);
-                    $('#username').val(html.data.username);
-                    $('#email').val(html.data.email);
-                    $(".form-group.col-6.password").css("display", "none");
+                    $('#name_ar').val(html.data.name.ar);
+                    $('#name_en').val(html.data.name.en);
+                    $('#price').val(html.data.price);
                     $('#hidden_id').val(html.data.id);
-                    $('.modal-title').text("{{ trans('admin.edit_user') }}");
+                    $('.modal-title').text("{{ trans('admin.edit_slider') }}");
                     $('#action_button').val("Edit");
                     $('#action').val("Edit");
                 }
@@ -308,6 +315,11 @@
         });
     });
 
+    // Filter Status
+    function filter_status(enabled_filter = null){
+        enabled = enabled_filter.value;
+        $('#data-table').DataTable().ajax.url(getLocation +'?enabled='+ enabled +'&type=filter').load();
+    }
 </script>
 
 @endpush

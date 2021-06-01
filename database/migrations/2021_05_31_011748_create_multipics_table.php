@@ -15,7 +15,9 @@ class CreateMultipicsTable extends Migration
     {
         Schema::create('multipics', function (Blueprint $table) {
             $table->id();
+            $table->integer('enabled')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
