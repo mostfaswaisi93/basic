@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -27,11 +26,6 @@ class User extends Authenticatable
         'updated_at' => 'date:Y-m-d - H:i A', 'last_login_at' => 'date:Y-m-d - H:i A'
     ];
     protected $dates    = ['created_at', 'updated_at', 'deleted_at', 'last_login_at'];
-
-    public function role()
-    {
-        return $this->hasOne(Role::class, 'id', 'role_id');
-    }
 
     public function getFullNameAttribute()
     {

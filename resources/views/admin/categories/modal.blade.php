@@ -20,9 +20,9 @@
                         placeholder="{{ trans('admin.en.name') }}">
                 </div>
                 <div class="form-group">
-                    <label class="form-label" for="price">{{ trans('admin.price') }}:</label>
+                    <label class="form-label" for="price">{{ trans('admin.user') }}:</label>
                     <input id="price" type="text" name="price" class="form-control" value="{{ old('price') }}"
-                        placeholder="{{ trans('admin.price') }}">
+                        placeholder="{{ trans('admin.user') }}">
                 </div>
                 <input type="hidden" name="action" id="action" />
                 <input type="hidden" name="hidden_id" id="hidden_id" />

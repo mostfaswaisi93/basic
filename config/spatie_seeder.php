@@ -9,7 +9,6 @@ return [
             // 'sliders'           => 'c,r,u,d,p,t',
             // 'contacts'          => 'c,r,u,d,p,t',
             'users'             => 'c,r,u,d,p,t',
-            'roles'             => 'c,r,u,d,p,t',
             // 'settings'          => 'c,r,u,d,p,t',
         ],
         'admin' => []

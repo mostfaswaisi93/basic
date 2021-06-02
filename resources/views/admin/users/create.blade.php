@@ -67,20 +67,6 @@
                                     </div>
                                     <div class="col-xl-4 col-md-4 col-12">
                                         <div class="form-group">
-                                            <label for="role_id">{{ trans('admin.role') }}:</label>
-                                            <select name="role_id" class="form-control">
-                                                <option value="" selected="selected">@lang('admin.all_roles')</option>
-                                                @foreach ($roles as $role)
-                                                <option value="{{ $role->id }}"
-                                                    {{ old('role_id') == $role->id ? 'selected' : '' }}>
-                                                    {{ $role->name }}
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4 col-md-4 col-12">
-                                        <div class="form-group">
                                             <label>{{ trans('admin.password') }}:</label>
                                             <input id="password" type="password" name="password" class="form-control"
                                                 placeholder="{{ trans('admin.password') }}">
@@ -129,7 +115,7 @@
                                                 <span class="align-middle">{{ trans('admin.permissions') }}</span>
                                             </h6>
                                             @php
-                                            $models = ['users', 'roles'];
+                                            $models = ['users'];
                                             $maps = ['create', 'read', 'update', 'delete', 'print', 'trash'];
                                             @endphp
                                             <table class="table table-striped table-borderless">

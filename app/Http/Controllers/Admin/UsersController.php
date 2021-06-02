@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Role;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
@@ -23,8 +22,8 @@ class UsersController extends Controller
 
     public function index()
     {
-        // $users = User::OrderBy('created_at', 'desc')->role('admin');
-        $users = User::OrderBy('created_at', 'desc');
+        $users = User::OrderBy('created_at', 'desc')->role('admin');
+        // $users = User::OrderBy('created_at', 'desc');
         if (request()->ajax()) {
             $users = $users->get();
             return datatables()->of($users)->make(true);
@@ -34,8 +33,7 @@ class UsersController extends Controller
 
     public function create()
     {
-        $roles = Role::all();
-        return view('admin.users.create', compact('roles'));
+        return view('admin.users.create');
     }
 
     public function store(Request $request)
@@ -46,11 +44,10 @@ class UsersController extends Controller
             'email'         => 'required|unique:users',
             'image'         => 'image',
             'password'      => 'required|confirmed',
-            'permissions'   => 'required|min:1',
-            'role_id'       => 'required'
+            'permissions'   => 'required|min:1'
         ]);
 
-        $request_data = $request->except(['password', 'password_confirmation', 'permissions', 'image', 'role_id']);
+        $request_data = $request->except(['password', 'password_confirmation', 'permissions', 'image']);
         $request_data['password'] = bcrypt($request->password);
 
         if ($request->image) {
@@ -63,7 +60,7 @@ class UsersController extends Controller
         }
 
         $user = User::create($request_data);
-        $user->assignRole($request->role_id);
+        $user->assignRole('admin');
         $user->syncPermissions($request->permissions);
 
         if (app()->getLocale() == 'ar') {
@@ -77,8 +74,7 @@ class UsersController extends Controller
 
     public function edit(User $user)
     {
-        $roles = Role::all();
-        return view('admin.users.edit', compact('roles'))->with('user', $user);
+        return view('admin.users.edit')->with('user', $user);
     }
 
     public function update(Request $request, User $user)
@@ -88,11 +84,10 @@ class UsersController extends Controller
             'last_name'     => 'required',
             'email'         => ['required', Rule::unique('users')->ignore($user->id)],
             'image'         => 'image',
-            'permissions'   => 'required|min:1',
-            'role_id'       => 'required'
+            'permissions'   => 'required|min:1'
         ]);
 
-        $request_data = $request->except(['permissions', 'image', 'role_id']);
+        $request_data = $request->except(['permissions', 'image']);
 
         if ($request->image) {
             if ($user->image != 'default.png') {
@@ -108,7 +103,6 @@ class UsersController extends Controller
         }
 
         $user->update($request_data);
-        $user->assignRole($request->role_id);
         $user->syncPermissions($request->permissions);
 
         if (app()->getLocale() == 'ar') {

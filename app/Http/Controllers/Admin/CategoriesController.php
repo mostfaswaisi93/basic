@@ -20,10 +20,7 @@ class CategoriesController extends Controller
     public function index()
     {
         $categories = Category::OrderBy('created_at', 'desc');
-        $enabled = request()->get('enabled');
         if (request()->ajax()) {
-            if (isset($enabled))
-                $categories->where('enabled', $enabled)->get();
             $categories = $categories->get();
             return datatables()->of($categories)->make(true);
         }
@@ -33,7 +30,7 @@ class CategoriesController extends Controller
     public function store(Request $request)
     {
         $rules = array(
-            'price'    =>  'required'
+            'user_id'    =>  'required'
         );
 
         foreach (config('translatable.locales') as $locale) {
@@ -48,7 +45,7 @@ class CategoriesController extends Controller
 
         $request_data = array(
             'name'       =>   $request->name,
-            'price'      =>   $request->price
+            'user_id'    =>   $request->user_id
         );
 
         Category::create($request_data);
@@ -67,7 +64,7 @@ class CategoriesController extends Controller
     public function update(Request $request, Category $category)
     {
         $rules = array(
-            'price'    =>  'required'
+            'user_id'    =>  'required'
         );
 
         foreach (config('translatable.locales') as $locale) {
@@ -82,7 +79,7 @@ class CategoriesController extends Controller
 
         $request_data = array(
             'name'       =>   json_encode($request->name, JSON_UNESCAPED_UNICODE),
-            'price'      =>   $request->price
+            'user_id'    =>   $request->user_id
         );
 
         $category::whereId($request->hidden_id)->update($request_data);
@@ -101,17 +98,5 @@ class CategoriesController extends Controller
         $ids = $request->ids;
         Category::whereIn('id', explode(",", $ids))->delete();
         return response()->json(['success' => 'The Data has been Deleted Successfully.']);
-    }
-
-    public function updateStatus(Request $request, $id)
-    {
-        $category           = Category::find($id);
-        $enabled            = $request->get('enabled');
-        $category->enabled  = $enabled;
-        $category           = $category->save();
-
-        if ($category) {
-            return response(['success' => true, "message" => 'Status has been Successfully Updated.']);
-        }
     }
 }

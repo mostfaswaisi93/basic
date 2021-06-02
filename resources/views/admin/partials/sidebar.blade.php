@@ -64,7 +64,7 @@
             @if (auth()->user()->can('read_categories'))
             <li {{ request()->route()->getName() === 'admin.categories.index' ? 'class=active' : '' }}>
                 <a href="{{ route('admin.categories.index') }}" class="d-flex align-items-center">
-                    <i data-feather='check-circle'></i>
+                    <i data-feather='list'></i>
                     <span class="menu-title text-truncate">{{ trans('admin.categories') }}</span>
                 </a>
             </li>
@@ -85,30 +85,14 @@
                 </a>
             </li>
             @endif
-            <li class="nav-item">
-                <a href="#" class="d-flex align-items-center">
+            @if (auth()->user()->can('read_users'))
+            <li {{ request()->route()->getName() === 'admin.users.index' ? 'class=active' : '' }}>
+                <a href="{{ route('admin.users.index') }}" class="d-flex align-items-center">
                     <i data-feather="users"></i>
-                    <span class="menu-title text-truncate">{{ trans('admin.users_management') }}</span>
+                    <span class="menu-title text-truncate">{{ trans('admin.users') }}</span>
                 </a>
-                <ul class="menu-content">
-                    @if (auth()->user()->can('read_users'))
-                    <li {{ request()->route()->getName() === 'admin.users.index' ? 'class=active' : '' }}>
-                        <a href="{{ route('admin.users.index') }}" class="d-flex align-items-center">
-                            <i data-feather="users"></i>
-                            <span class="menu-title text-truncate">{{ trans('admin.users') }}</span>
-                        </a>
-                    </li>
-                    @endif
-                    @if (auth()->user()->can('read_roles'))
-                    <li {{ request()->route()->getName() === 'admin.roles.index' ? 'class=active' : '' }}>
-                        <a href="{{ route('admin.roles.index') }}" class="d-flex align-items-center">
-                            <i data-feather="sliders"></i>
-                            <span class="menu-title text-truncate">{{ trans('admin.roles') }}</span>
-                        </a>
-                    </li>
-                    @endif
-                </ul>
             </li>
+            @endif
             @if (auth()->user()->can('read_settings'))
             <li {{ request()->route()->getName() === 'admin.settings.index' ? 'class=active' : '' }}>
                 <a href="{{ route('admin.settings.index') }}" class="d-flex align-items-center">

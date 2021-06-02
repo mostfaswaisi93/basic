@@ -13,7 +13,7 @@ return [
     'add'                       => 'Add',
     'save'                      => 'Save',
     'create'                    => 'Create',
-    'read'                      => 'Rread',
+    'read'                      => 'Read',
     'edit'                      => 'Edit',
     'change'                    => 'Change',
     'update'                    => 'Update',
@@ -63,12 +63,12 @@ return [
     'updated_successfully'      => 'Updated Successfully',
     'deleted_successfully'      => 'Deleted Successfully',
 
-    'create_service'            => 'Add New Service',
+    'create_category'           => 'Add New Category',
     'create_constant'           => 'Add New Constant',
     'create_role'               => 'Add New Role',
     'create_user'               => 'Add New User',
 
-    'edit_service'              => 'Edit Service Data',
+    'edit_category'             => 'Edit Category Data',
     'edit_constant'             => 'Edit Constant Data',
     'edit_role'                 => 'Edit Role Data',
     'edit_user'                 => 'Edit User Data',
@@ -106,7 +106,7 @@ return [
     'status_changed'            => 'Status has been Successfully Updated',
     'status_not_changed'        => 'Status has not been Updated!',
 
-    'services'                  => 'Services',
+    'categories'                => 'Categories',
     'notifications'             => 'Notifications',
     'contacts'                  => 'Contacts',
     'system_constants'          => 'System Constants',
@@ -120,7 +120,7 @@ return [
     'users_management'          => 'Users Management',
     'users_count'               => 'Users Count',
 
-    'service'                   => 'Service',
+    'category'                  => 'Category',
     'constant'                  => 'Constant',
     'role'                      => 'Role',
     'user'                      => 'User',
