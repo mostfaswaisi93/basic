@@ -64,11 +64,13 @@ return [
     'deleted_successfully'      => 'Deleted Successfully',
 
     'create_category'           => 'Add New Category',
+    'create_brand'              => 'Add New Brand',
     'create_constant'           => 'Add New Constant',
     'create_role'               => 'Add New Role',
     'create_user'               => 'Add New User',
 
     'edit_category'             => 'Edit Category Data',
+    'edit_brand'                => 'Edit Brand Data',
     'edit_constant'             => 'Edit Constant Data',
     'edit_role'                 => 'Edit Role Data',
     'edit_user'                 => 'Edit User Data',
@@ -107,6 +109,7 @@ return [
     'status_not_changed'        => 'Status has not been Updated!',
 
     'categories'                => 'Categories',
+    'brands'                    => 'Brands',
     'notifications'             => 'Notifications',
     'contacts'                  => 'Contacts',
     'system_constants'          => 'System Constants',
@@ -121,6 +124,7 @@ return [
     'users_count'               => 'Users Count',
 
     'category'                  => 'Category',
+    'brand'                     => 'Brand',
     'constant'                  => 'Constant',
     'role'                      => 'Role',
     'user'                      => 'User',

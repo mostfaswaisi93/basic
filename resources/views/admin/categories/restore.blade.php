@@ -8,60 +8,25 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-body">
-                        <ul class="nav nav-pills" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center active" id="category-tab" data-toggle="tab"
-                                    href="#category" aria-controls="category" role="tab" aria-selected="true">
-                                    <i data-feather="list"></i><span
-                                        class="d-none d-sm-block">{{ trans('admin.categories') }}</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center" id="trash-tab" data-toggle="tab"
-                                    href="#trash" aria-controls="trash" role="tab" aria-selected="false">
-                                    <i data-feather="info"></i><span
-                                        class="d-none d-sm-block">{{ trans('admin.trash') }}</span>
-                                </a>
-                            </li>
-                        </ul>
+                    <div class="card-header border-bottom">
+                        <h4 class="card-title"><b>{{ trans('admin.categories') }}</b></h4>
                     </div>
-                    <div class="tab-content">
-                        <div class="tab-pane table-responsive active" id="category" aria-labelledby="category-tab"
-                            role="tabpanel" style="padding: 10px">
-                            <table id="data-table"
-                                class="table table-striped table-bordered table-hover table-sm dt-responsive nowrap"
-                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>#</th>
-                                        <th>{{ trans('admin.name') }}</th>
-                                        <th>{{ trans('admin.user') }}</th>
-                                        <th>{{ trans('admin.created_at') }}</th>
-                                        <th>{{ trans('admin.actions') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane table-responsive" id="trash" aria-labelledby="trash-tab"
-                            role="tabpanel" style="padding: 10px">
-                            <table id="trash-table"
-                                class="table table-striped table-bordered table-hover table-sm dt-responsive nowrap"
-                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>{{ trans('admin.name') }}</th>
-                                        <th>{{ trans('admin.user') }}</th>
-                                        <th>{{ trans('admin.created_at') }}</th>
-                                        <th>{{ trans('admin.actions') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
+                    <div class="table-responsive" style="padding: 10px">
+                        <table id="data-table"
+                            class="table table-striped table-bordered table-hover table-sm dt-responsive nowrap"
+                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>#</th>
+                                    <th>{{ trans('admin.name') }}</th>
+                                    <th>{{ trans('admin.user') }}</th>
+                                    <th>{{ trans('admin.created_at') }}</th>
+                                    <th>{{ trans('admin.actions') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -75,7 +40,6 @@
 @push('scripts')
 
 @include('partials.delete')
-{{-- @include('partials.restore') --}}
 @include('partials.multi_delete')
 
 <script type="text/javascript">
@@ -99,11 +63,7 @@
                     }, searchable: false, orderable: false
                 },
                 { data: 'name_trans' },
-                { data: 'user',
-                    render: function(data, type, row, meta) {
-                        return "<div class='badge badge-light-primary'>"+ data +"</div>";
-                    }
-                },
+                { data: 'user_id' },
                 { data: 'created_at', className: 'created_at',
                     render: function(data, type, row, meta){
                         var text1 = "<div>"+ data +" - </div>";
@@ -197,95 +157,6 @@
                     'data-target': '#categoryModal',
                     'name': 'create_category',
                     'id': 'create_category' }
-                },
-            ],
-            language: {
-                url: getDataTableLanguage(),
-                search: ' ',
-                searchPlaceholder: '{{ trans("admin.search") }}...'
-            }
-        });
-
-        $('#trash-table').DataTable({
-            processing: true,
-            serverSide: true,
-            responsive: true,
-            drawCallback: function(settings){ feather.replace(); },
-            order: [[ 2, "desc" ]],
-            ajax: {
-                url: "{{ route('admin.categories.index') }}",
-            },
-            columns: [
-                {
-                    render: function(data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
-                    }, searchable: false, orderable: false
-                },
-                { data: 'name_trans' },
-                { data: 'user',
-                    render: function(data, type, row, meta) {
-                        return "<div class='badge badge-light-primary'>"+ data +"</div>";
-                    }
-                },
-                { data: 'created_at', className: 'created_at',
-                    render: function(data, type, row, meta){
-                        var text1 = "<div>"+ data +" - </div>";
-                        var text2 = "<div>"+ row.created_at_before +"</div>";
-                        return text1 + text2;
-                    }
-                },
-                { data: 'action', orderable: false,
-                    render: function(data, type, row, meta) {
-                        // Action Buttons
-                        return (
-                            '<span>' +
-                                '@if(auth()->user()->can('update_categories'))' +
-                                    '<a id="'+ row.id +'" name="edit" class="item-edit edit mr-1" data-toggle="modal" data-target="#categoryModal" title="{{ trans("admin.edit") }}">' +
-                                    feather.icons['edit'].toSvg({ class: 'font-small-4' }) +
-                                    '</a>' +
-                                '@endif' +
-                            '</span>' +
-                            '<span>' +
-                                '@if(auth()->user()->can('delete_categories'))' +
-                                    '<a id="'+ row.id +'" class="item-edit delete" title="{{ trans("admin.delete") }}">' +
-                                    feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' }) +
-                                    '</a>' +
-                                '@endif' +
-                            '</span>'
-                        );
-                    }
-                }
-            ],
-            "columnDefs": [],
-            dom:  "<'row'<''l><'col-sm-8 text-center'B><''f>>" +
-                  "<'row'<'col-sm-12'tr>>" +
-                  "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-            buttons: [
-                { text: '<i data-feather="refresh-ccw"></i> {{ trans("admin.refresh") }}',
-                  className: 'btn dtbtn btn-sm btn-dark',
-                  attr: { 'title': '{{ trans("admin.refresh") }}' },
-                    action: function (e, dt, node, config) {
-                        dt.ajax.reload(null, false);
-                    }
-                },
-                { extend: 'csvHtml5', charset: "UTF-8", bom: true,
-                  className: 'btn dtbtn btn-sm btn-success',
-                  text: '<i data-feather="file"></i> CSV',
-                  attr: { 'title': 'CSV' }
-                },
-                { extend: 'excelHtml5', charset: "UTF-8", bom: true,
-                  className: 'btn dtbtn btn-sm btn-success',
-                  text: '<i data-feather="file"></i> Excel',
-                  attr: { 'title': 'Excel' }
-                },
-                { text: '<i data-feather="printer"></i> {{ trans("admin.print") }}',
-                  className: '@if (auth()->user()->can("print_categories")) btn dtbtn btn-sm btn-primary @else btn dtbtn btn-sm btn-primary disabled @endif',
-                  extend: 'print', attr: { 'title': '{{ trans("admin.print") }}' }
-                },
-                { extend: 'pdfHtml5', charset: "UTF-8", bom: true,
-                  className: 'btn dtbtn btn-sm btn-danger',
-                  text: '<i data-feather="file"></i> PDF',
-                  pageSize: 'A4', attr: { 'title': 'PDF' }
                 },
             ],
             language: {
@@ -397,6 +268,7 @@
                 success: function(html){
                     $('#name_ar').val(html.data.name.ar);
                     $('#name_en').val(html.data.name.en);
+                    $('#price').val(html.data.price);
                     $('#hidden_id').val(html.data.id);
                     $('.modal-title').text("{{ trans('admin.edit_category') }}");
                     $('#action_button').val("Edit");

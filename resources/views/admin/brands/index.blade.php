@@ -64,7 +64,13 @@
                 },
                 { data: 'name_trans' },
                 { data: 'user_id' },
-                { data: 'created_at', className: 'created_at' },
+                { data: 'created_at', className: 'created_at',
+                    render: function(data, type, row, meta){
+                        var text1 = "<div>"+ data +" - </div>";
+                        var text2 = "<div>"+ row.created_at_before +"</div>";
+                        return text1 + text2;
+                    }
+                },
                 { data: 'action', orderable: false,
                     render: function(data, type, row, meta) {
                         // Action Buttons

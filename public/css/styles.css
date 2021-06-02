@@ -71,6 +71,30 @@ label {
     width: 15% !important;
 }
 
+#trash-table thead>tr>th:first-child {
+    width: 3% !important;
+}
+
+#trash-table thead>tr>th.image {
+    width: 5% !important;
+}
+
+#trash-table thead>tr>th.status {
+    width: 8% !important;
+}
+
+#trash-table tbody>tr>td.last_login_at {
+    width: 15% !important;
+}
+
+#trash-table tbody>tr>td.created_at {
+    width: 15% !important;
+}
+
+#trash-table thead>tr>th:last-child {
+    width: 15% !important;
+}
+
 #form_result .alert .alert-body {
     padding: 0.4rem 1rem;
 }

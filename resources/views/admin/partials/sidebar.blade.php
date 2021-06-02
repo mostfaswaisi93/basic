@@ -72,8 +72,16 @@
             @if (auth()->user()->can('read_brands'))
             <li {{ request()->route()->getName() === 'admin.brands.index' ? 'class=active' : '' }}>
                 <a href="{{ route('admin.brands.index') }}" class="d-flex align-items-center">
-                    <i data-feather='check-circle'></i>
+                    <i data-feather='image'></i>
                     <span class="menu-title text-truncate">{{ trans('admin.brands') }}</span>
+                </a>
+            </li>
+            @endif
+            @if (auth()->user()->can('read_sliders'))
+            <li {{ request()->route()->getName() === 'admin.sliders.index' ? 'class=active' : '' }}>
+                <a href="{{ route('admin.sliders.index') }}" class="d-flex align-items-center">
+                    <i data-feather='sliders'></i>
+                    <span class="menu-title text-truncate">{{ trans('admin.sliders') }}</span>
                 </a>
             </li>
             @endif

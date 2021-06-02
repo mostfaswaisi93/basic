@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 
 class CategoriesController extends Controller
@@ -22,16 +23,17 @@ class CategoriesController extends Controller
         $categories = Category::OrderBy('created_at', 'desc');
         if (request()->ajax()) {
             $categories = $categories->get();
-            return datatables()->of($categories)->make(true);
+            return datatables()->of($categories)
+                ->addColumn('user', function ($data) {
+                    return ucfirst($data->user->first_name) . ' ' . ucfirst($data->user->last_name);
+                })->make(true);
         }
         return view('admin.categories.index');
     }
 
     public function store(Request $request)
     {
-        $rules = array(
-            'user_id'    =>  'required'
-        );
+        $rules = array();
 
         foreach (config('translatable.locales') as $locale) {
             $rules += ['name.' . $locale => 'required'];
@@ -45,7 +47,7 @@ class CategoriesController extends Controller
 
         $request_data = array(
             'name'       =>   $request->name,
-            'user_id'    =>   $request->user_id
+            'user_id'    =>   Auth::user()->id
         );
 
         Category::create($request_data);
@@ -63,9 +65,7 @@ class CategoriesController extends Controller
 
     public function update(Request $request, Category $category)
     {
-        $rules = array(
-            'user_id'    =>  'required'
-        );
+        $rules = array();
 
         foreach (config('translatable.locales') as $locale) {
             $rules += ['name.' . $locale => 'required'];
@@ -78,8 +78,7 @@ class CategoriesController extends Controller
         }
 
         $request_data = array(
-            'name'       =>   json_encode($request->name, JSON_UNESCAPED_UNICODE),
-            'user_id'    =>   $request->user_id
+            'name'       =>   json_encode($request->name, JSON_UNESCAPED_UNICODE)
         );
 
         $category::whereId($request->hidden_id)->update($request_data);
@@ -91,6 +90,12 @@ class CategoriesController extends Controller
     {
         $category = Category::findOrFail($id);
         $category->delete();
+    }
+
+    public function restore($id)
+    {
+        $category = Category::onlyTrashed()->find($id);
+        $category->forceDelete();
     }
 
     public function multi_delete(Request $request)

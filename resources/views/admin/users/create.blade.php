@@ -115,7 +115,7 @@
                                                 <span class="align-middle">{{ trans('admin.permissions') }}</span>
                                             </h6>
                                             @php
-                                            $models = ['users'];
+                                            $models = ['users', 'categories', 'brands'];
                                             $maps = ['create', 'read', 'update', 'delete', 'print', 'trash'];
                                             @endphp
                                             <table class="table table-striped table-borderless">
