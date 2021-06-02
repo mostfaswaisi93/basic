@@ -61,19 +61,19 @@
                     <span class="menu-title text-truncate">{{ trans('admin.home') }}</span>
                 </a>
             </li>
-            @if (auth()->user()->can('read_services'))
-            <li {{ request()->route()->getName() === 'admin.services.index' ? 'class=active' : '' }}>
-                <a href="{{ route('admin.services.index') }}" class="d-flex align-items-center">
+            @if (auth()->user()->can('read_categories'))
+            <li {{ request()->route()->getName() === 'admin.categories.index' ? 'class=active' : '' }}>
+                <a href="{{ route('admin.categories.index') }}" class="d-flex align-items-center">
                     <i data-feather='check-circle'></i>
-                    <span class="menu-title text-truncate">{{ trans('admin.services') }}</span>
+                    <span class="menu-title text-truncate">{{ trans('admin.categories') }}</span>
                 </a>
             </li>
             @endif
-            @if (auth()->user()->can('read_notifications'))
-            <li {{ request()->route()->getName() === 'admin.notifications.index' ? 'class=active' : '' }}>
-                <a href="{{ route('admin.notifications.index') }}" class="d-flex align-items-center">
-                    <i data-feather="bell"></i>
-                    <span class="menu-title text-truncate">{{ trans('admin.notifications') }}</span>
+            @if (auth()->user()->can('read_brands'))
+            <li {{ request()->route()->getName() === 'admin.brands.index' ? 'class=active' : '' }}>
+                <a href="{{ route('admin.brands.index') }}" class="d-flex align-items-center">
+                    <i data-feather='check-circle'></i>
+                    <span class="menu-title text-truncate">{{ trans('admin.brands') }}</span>
                 </a>
             </li>
             @endif

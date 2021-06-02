@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Intervention\Image\Facades\Image;
-use Spatie\Permission\Models\Role as SpatieRole;
 
 class UsersController extends Controller
 {
@@ -78,21 +77,23 @@ class UsersController extends Controller
 
     public function edit(User $user)
     {
-        return view('admin.users.edit')->with('user', $user);
+        $roles = Role::all();
+        return view('admin.users.edit', compact('roles'))->with('user', $user);
     }
 
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'username' => ['required', Rule::unique('users')->ignore($user->id)],
-            'email' => ['required', Rule::unique('users')->ignore($user->id)],
-            'image' => 'image',
-            'permissions' => 'required|min:1',
+            'first_name'    => 'required',
+            'last_name'     => 'required',
+            'email'         => ['required', Rule::unique('users')->ignore($user->id)],
+            'image'         => 'image',
+            'permissions'   => 'required|min:1',
+            'role_id'       => 'required'
         ]);
 
-        $request_data = $request->except(['permissions', 'image']);
+        $request_data = $request->except(['permissions', 'image', 'role_id']);
+
         if ($request->image) {
             if ($user->image != 'default.png') {
                 Storage::disk('public_uploads')->delete('/users/' . $user->image);
@@ -107,6 +108,7 @@ class UsersController extends Controller
         }
 
         $user->update($request_data);
+        $user->assignRole($request->role_id);
         $user->syncPermissions($request->permissions);
 
         if (app()->getLocale() == 'ar') {

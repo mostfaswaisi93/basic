@@ -135,6 +135,10 @@ label {
     box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
 }
 
+a.edit {
+    color: #6e6b7b;
+}
+
 
 /* Modal */
 
@@ -161,7 +165,7 @@ label {
 }
 
 
-/* 
+/*
 
 .modal-header .close {
     color: #ffffff;

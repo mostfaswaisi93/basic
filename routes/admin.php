@@ -14,6 +14,7 @@ Route::group(
 
             Route::resources([
                 'categories'        => CategoriesController::class,
+                'brands'            => BrandsController::class,
                 'contacts'          => ContactsController::class,
                 'roles'             => RolesController::class,
                 'users'             => UsersController::class,
@@ -24,6 +25,11 @@ Route::group(
             Route::get('categories/destroy/{id}', 'CategoriesController@destroy');
             Route::delete('categories/destroy/all', 'CategoriesController@multi_delete');
             Route::post('categories/updateStatus/{id}', 'CategoriesController@updateStatus');
+
+            Route::post('brands/update', 'BrandsController@update')->name('brands.update');
+            Route::get('brands/destroy/{id}', 'BrandsController@destroy');
+            Route::delete('brands/destroy/all', 'BrandsController@multi_delete');
+            Route::post('brands/updateStatus/{id}', 'BrandsController@updateStatus');
 
             Route::get('contacts/destroy/{id}', 'ContactsController@destroy');
 

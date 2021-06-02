@@ -94,15 +94,8 @@
                         return (
                             '<span>' +
                                 '@if(auth()->user()->can('update_users'))' +
-                                    '<a id="'+ row.id +'" name="edit" class="item-edit edit mr-1" data-toggle="modal" data-target="#userModal" title="{{ trans("admin.edit") }}">' +
+                                    '<a id="'+ row.id +'" href="users/'+ row.id +'/edit" name="edit" class="item-edit edit mr-1" title="{{ trans("admin.edit") }}">' +
                                     feather.icons['edit'].toSvg({ class: 'font-small-4' }) +
-                                    '</a>' +
-                                '@endif' +
-                            '</span>' +
-                            '<span>' +
-                                '@if(auth()->user()->can('read_users'))' +
-                                    '<a id="'+ row.id +'" name="show" class="item-edit show mr-1" data-toggle="modal" data-target="#userModal" title="{{ trans("admin.show") }}">' +
-                                    feather.icons['eye'].toSvg({ class: 'font-small-4' }) +
                                     '</a>' +
                                 '@endif' +
                             '</span>' +
@@ -176,9 +169,9 @@
                 { text: '<i data-feather="plus"></i> {{ trans("admin.create_user") }}',
                   className: '@if (auth()->user()->can("create_users")) btn dtbtn btn-sm btn-primary @else btn dtbtn btn-sm btn-primary disabled @endif',
                   attr: {
-                    'title': '{{ trans("admin.create_user") }}',
-                    href: '{{ route("admin.users.create") }}'
-                     },
+                        'title': '{{ trans("admin.create_user") }}',
+                        href: '{{ route("admin.users.create") }}'
+                    },
                     action: function (e, dt, node, config)
                     {
                         // href location

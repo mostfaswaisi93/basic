@@ -3,6 +3,27 @@
 
 @section('content')
 
+<div class="content-header row">
+    <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+            <div class="col-12">
+                <h2 class="content-header-title float-left mb-0">{{ trans('admin.edit_user') }}</h2>
+                <div class="breadcrumb-wrapper">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('admin.index') }}">{{ trans('admin.home') }}</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('admin.users.index') }}">{{ trans('admin.users') }}</a>
+                        </li>
+                        <li class="breadcrumb-item active">{{ trans('admin.edit_user') }}</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="content-body">
     <section class="portlet">
         <div class="row">
@@ -10,8 +31,8 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">
-                            <i class="feather icon-edit mr-25"></i>
-                            {{ trans('admin.edit_user') }} - {{ $user->name }}
+                            <i class="mr-25" data-feather='edit'></i>
+                            {{ trans('admin.edit_user') }} - {{ $user->full_name }}
                         </h4>
                     </div>
                     <div class="card-content">
@@ -21,78 +42,84 @@
                                 enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
-                                <div class="row">
-                                    <div class="col-md-6 col-12">
+                                <div class="row mt-1">
+                                    <div class="col-xl-6 col-md-6 col-12">
                                         <div class="form-group">
-                                            <div class="controls">
-                                                <label>{{ trans('admin.first_name') }}</label>
-                                                <input id="first_name" type="text" name="first_name"
-                                                    class="form-control" value="{{ $user->first_name }}"
-                                                    placeholder="{{ trans('admin.first_name') }}">
-                                            </div>
+                                            <label>{{ trans('admin.first_name') }}</label>
+                                            <input id="first_name" type="text" name="first_name" class="form-control"
+                                                value="{{ $user->first_name }}"
+                                                placeholder="{{ trans('admin.first_name') }}">
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-12">
+                                    <div class="col-xl-6 col-md-6 col-12">
                                         <div class="form-group">
-                                            <div class="controls">
-                                                <label>{{ trans('admin.last_name') }}</label>
-                                                <input id="last_name" type="text" name="last_name" class="form-control"
-                                                    value="{{ $user->last_name }}"
-                                                    placeholder="{{ trans('admin.last_name') }}">
-                                            </div>
+                                            <label>{{ trans('admin.last_name') }}</label>
+                                            <input id="last_name" type="text" name="last_name" class="form-control"
+                                                value="{{ $user->last_name }}"
+                                                placeholder="{{ trans('admin.last_name') }}">
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-12">
+                                    <div class="col-xl-6 col-md-6 col-12">
                                         <div class="form-group">
-                                            <div class="controls">
-                                                <label>{{ trans('admin.username') }}</label>
-                                                <input id="username" type="text" name="username" class="form-control"
-                                                    value="{{ $user->username }}"
-                                                    placeholder="{{ trans('admin.username') }}">
-                                            </div>
+                                            <label for="email">{{ trans('admin.email') }}:</label>
+                                            <input id="email" type="email" name="email" class="form-control"
+                                                value="{{ $user->email }}" placeholder="{{ trans('admin.email') }}">
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-12">
+                                    <div class="col-xl-6 col-md-6 col-12">
                                         <div class="form-group">
-                                            <div class="controls">
-                                                <label>{{ trans('admin.email') }}</label>
-                                                <input id="email" type="email" name="email" class="form-control"
-                                                    value="{{ $user->email }}" placeholder="{{ trans('admin.email') }}">
-                                            </div>
+                                            <label for="role_id">{{ trans('admin.role') }}:</label>
+                                            <select name="role_id" class="form-control">
+                                                <option value="">@lang('admin.all_roles')</option>
+                                                @foreach ($roles as $role)
+                                                <option value="{{ $role->id }}"
+                                                    {{ $user->role_id == $role->id ? 'selected' : '' }}>
+                                                    {{ $role->name }}
+                                                </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="media mb-2">
-                                            <a class="mr-2 my-25" href="#">
-                                                <img src="{{ $user->image_path }}" alt="users avatar"
-                                                    class="users-avatar-shadow rounded image img-thumbnail image-preview"
-                                                    height="70" width="70">
-                                            </a>
+                                            <img src="{{ $user->image_path }}" alt="users avatar"
+                                                class="user-avatar users-avatar-shadow rounded mr-2 my-25 cursor-pointer"
+                                                height="90" width="90" />
                                             <div class="media-body mt-50">
-                                                <label>{{ trans('admin.user_image') }}</label>
-                                                <div class="col-4 d-flex mt-1 px-0">
-                                                    <input type="file" class="form-control-file image" name="image"
-                                                        id="image" style="display:none;">
-                                                    <button class="btn btn-primary" onclick="FileUpload();">
-                                                        <i class="fa fa-plus"></i>
-                                                        {{ trans('admin.file_upload') }}
+                                                <h4 class="mb-1">
+                                                    <i data-feather="user" class="font-medium-4 mr-25"></i>
+                                                    <span class="align-middle">{{ trans('admin.user_image') }}</span>
+                                                </h4>
+                                                <div class="col-12 d-flex mt-1 px-0">
+                                                    <label class="btn btn-primary mr-75 mb-0" for="change-picture">
+                                                        <span
+                                                            class="d-none d-sm-block">{{ trans('admin.change') }}</span>
+                                                        <input class="form-control image" name="image" type="file"
+                                                            id="change-picture" hidden
+                                                            accept="image/png, image/jpeg, image/jpg" />
+                                                        <span class="d-block d-sm-none">
+                                                            <i class="mr-0" data-feather="edit"></i>
+                                                        </span>
+                                                    </label>
+                                                    <button class="btn btn-outline-secondary d-block d-sm-none">
+                                                        <i class="mr-0" data-feather="trash-2"></i>
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <div class="table-responsive border rounded px-1">
-                                            <h6 class="border-bottom py-1 mx-1 mb-0 font-medium-2">
-                                                <i class="feather icon-lock mr-50"></i>
-                                                {{ trans('admin.permissions') }}
-                                            </h6> <br>
+                                        <div class="table-responsive border rounded mt-1">
+                                            <h6 class="py-1 mx-1 mb-0 font-medium-2">
+                                                <i data-feather="lock" class="font-medium-3 mr-25"></i>
+                                                <span class="align-middle">{{ trans('admin.permissions') }}</span>
+                                            </h6>
                                             @php
-                                            $models = ['users', 'categories', 'countries', 'cities'];
-                                            $maps = ['create', 'read', 'update', 'delete'];
+                                            $models = ['users', 'roles'];
+                                            $maps = ['edit', 'read', 'update', 'delete', 'print', 'trash'];
                                             @endphp
-                                            <table class="table table-borderless">
-                                                <thead>
+                                            <table class="table table-striped table-borderless">
+                                                <thead class="thead-light">
                                                     <tr>
                                                         <th>#</th>
                                                         @foreach ($maps as $map)
@@ -101,70 +128,6 @@
                                                         </th>
                                                         @endforeach
                                                     </tr>
-                                                    <tr>
-                                                        <th>
-                                                            <div class="vs-checkbox-con vs-checkbox-primary">
-                                                                <input type="checkbox" name="" id="select-all">
-                                                                <span class="vs-checkbox">
-                                                                    <span class="vs-checkbox--check">
-                                                                        <i class="vs-icon feather icon-check"></i>
-                                                                    </span>
-                                                                </span> {{ trans('admin.select_all_permissions') }}
-                                                            </div>
-                                                        </th>
-                                                        <th>
-                                                            <div class="vs-checkbox-con vs-checkbox-primary">
-                                                                <i class="feather icon-pocket feather-select"></i>
-                                                                &nbsp;
-                                                                <input type="checkbox" name="" id="select-create"
-                                                                    title="{{ trans('admin.select_all') }}">
-                                                                <span class="vs-checkbox">
-                                                                    <span class="vs-checkbox--check">
-                                                                        <i class="vs-icon feather icon-check"></i>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </th>
-                                                        <th>
-                                                            <div class="vs-checkbox-con vs-checkbox-primary">
-                                                                <i class="feather icon-pocket feather-select"></i>
-                                                                &nbsp;
-                                                                <input type="checkbox" name="" id="select-read"
-                                                                    title="{{ trans('admin.select_all') }}">
-                                                                <span class="vs-checkbox">
-                                                                    <span class="vs-checkbox--check">
-                                                                        <i class="vs-icon feather icon-check"></i>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </th>
-                                                        <th>
-                                                            <div class="vs-checkbox-con vs-checkbox-primary">
-                                                                <i class="feather icon-pocket feather-select"></i>
-                                                                &nbsp;
-                                                                <input type="checkbox" name="" id="select-update"
-                                                                    title="{{ trans('admin.select_all') }}">
-                                                                <span class="vs-checkbox">
-                                                                    <span class="vs-checkbox--check">
-                                                                        <i class="vs-icon feather icon-check"></i>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </th>
-                                                        <th>
-                                                            <div class="vs-checkbox-con vs-checkbox-primary">
-                                                                <i class="feather icon-pocket feather-select"></i>
-                                                                &nbsp;
-                                                                <input type="checkbox" name="" id="select-delete"
-                                                                    title="{{ trans('admin.select_all') }}">
-                                                                <span class="vs-checkbox">
-                                                                    <span class="vs-checkbox--check">
-                                                                        <i class="vs-icon feather icon-check"></i>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </th>
-                                                    </tr>
                                                 </thead>
                                                 <tbody>
                                                     @foreach ($models as $index => $model)
@@ -172,15 +135,14 @@
                                                         <td> {{ trans('admin.' .$model) }}</td>
                                                         @foreach ($maps as $map)
                                                         <td>
-                                                            <div class="vs-checkbox-con vs-checkbox-primary">
+                                                            <div class="custom-control custom-checkbox">
                                                                 <input type="checkbox" name="permissions[]"
-                                                                    {{ $user->can($map . '_' . $model) ? 'checked' : '' }}
+                                                                    class="custom-control-input"
+                                                                    id="{{ $map . '_' . $model }}"
+                                                                    {{ $user->hasAnyPermission($map . '_' . $model) ? 'checked' : '' }}
                                                                     value="{{ $map . '_' . $model }}">
-                                                                <span class="vs-checkbox">
-                                                                    <span class="vs-checkbox--check">
-                                                                        <i class="vs-icon feather icon-check"></i>
-                                                                    </span>
-                                                                </span>
+                                                                <label class="custom-control-label"
+                                                                    for="{{ $map . '_' . $model }}"></label>
                                                             </div>
                                                         </td>
                                                         @endforeach
@@ -193,14 +155,8 @@
                                     <div class="col-12">
                                         <hr>
                                     </div>
-                                    <div class="col-md-6 col-12">
-                                        <div class="form-group">
-                                            <div class="controls">
-                                                <button type="submit" class="btn btn-primary">
-                                                    {{ trans('admin.edit') }}
-                                                </button>
-                                            </div>
-                                        </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary">{{ trans('admin.edit') }}</button>
                                     </div>
                                 </div>
                             </form>
@@ -213,31 +169,3 @@
 </div>
 
 @endsection
-
-@push('scripts')
-
-<script type="text/javascript">
-    document.getElementById('select-all').onclick = function() {
-  var checkboxes = document.getElementsByName('permissions[]');
-  for (var checkbox of checkboxes) {
-    checkbox.checked = this.checked;
-  }
-}
-
-// Select All By Name
-var models = ["users", "categories", "countries", "cities"];
-var mLen = models.length;
-var maps = ["create", "read", "update", "delete"];
-var text;
-document.getElementById('select-create').onclick = function() {
-  for (i = 0; i < mLen; i++) {
-    text = "create_" + models[i];
-  }
-  var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-  for (var checkbox of checkboxes) {
-    checkbox.checked = this.checked;
-  }
-}
-</script>
-
-@endpush

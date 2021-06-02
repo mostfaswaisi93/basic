@@ -108,8 +108,9 @@
                                                     <label class="btn btn-primary mr-75 mb-0" for="change-picture">
                                                         <span
                                                             class="d-none d-sm-block">{{ trans('admin.change') }}</span>
-                                                        <input class="form-control" type="file" id="change-picture"
-                                                            hidden accept="image/png, image/jpeg, image/jpg" />
+                                                        <input class="form-control image" name="image" type="file"
+                                                            id="change-picture" hidden
+                                                            accept="image/png, image/jpeg, image/jpg" />
                                                         <span class="d-block d-sm-none">
                                                             <i class="mr-0" data-feather="edit"></i>
                                                         </span>

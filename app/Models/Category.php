@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Translatable\HasTranslations;
 
 class Category extends BaseModel
 {
     use HasFactory, HasTranslations;
 
     protected $table        = 'categories';
-    protected $fillable     = ['category_name', 'user_id', 'enabled'];
+    protected $fillable     = ['name', 'user_id', 'enabled'];
     protected $appends      = ['name_trans'];
     public $translatable    = ['name'];
 

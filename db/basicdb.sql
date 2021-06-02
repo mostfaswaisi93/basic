@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 01, 2021 at 04:12 PM
+-- Generation Time: Jun 02, 2021 at 11:31 AM
 -- Server version: 10.5.4-MariaDB-log
 -- PHP Version: 7.4.19
 
@@ -29,6 +29,8 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `brands` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `enabled` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -43,7 +45,8 @@ CREATE TABLE `brands` (
 
 CREATE TABLE `categories` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `category_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` int(11) NOT NULL,
   `enabled` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -76,8 +79,14 @@ CREATE TABLE `contacts` (
 
 CREATE TABLE `contact_forms` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subject` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `enabled` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -104,8 +113,13 @@ CREATE TABLE `failed_jobs` (
 
 CREATE TABLE `home_abouts` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `short_dis` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `long_dis` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `enabled` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -155,12 +169,9 @@ CREATE TABLE `model_has_permissions` (
 --
 
 INSERT INTO `model_has_permissions` (`permission_id`, `model_type`, `model_id`) VALUES
-(31, 'App\\Models\\User', 2),
-(31, 'App\\Models\\User', 3),
-(32, 'App\\Models\\User', 2),
-(32, 'App\\Models\\User', 3),
-(37, 'App\\Models\\User', 3),
-(38, 'App\\Models\\User', 3);
+(13, 'App\\Models\\User', 2),
+(14, 'App\\Models\\User', 2),
+(15, 'App\\Models\\User', 2);
 
 -- --------------------------------------------------------
 
@@ -180,8 +191,7 @@ CREATE TABLE `model_has_roles` (
 
 INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (1, 'App\\Models\\User', 1),
-(2, 'App\\Models\\User', 2),
-(3, 'App\\Models\\User', 3);
+(2, 'App\\Models\\User', 2);
 
 -- --------------------------------------------------------
 
@@ -191,6 +201,7 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 
 CREATE TABLE `multipics` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `enabled` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -228,54 +239,30 @@ CREATE TABLE `permissions` (
 --
 
 INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
-(1, 'create_brands', 'web', '2021-06-01 16:00:24', '2021-06-01 16:00:24'),
-(2, 'read_brands', 'web', '2021-06-01 16:00:24', '2021-06-01 16:00:24'),
-(3, 'update_brands', 'web', '2021-06-01 16:00:24', '2021-06-01 16:00:24'),
-(4, 'delete_brands', 'web', '2021-06-01 16:00:24', '2021-06-01 16:00:24'),
-(5, 'print_brands', 'web', '2021-06-01 16:00:24', '2021-06-01 16:00:24'),
-(6, 'trash_brands', 'web', '2021-06-01 16:00:24', '2021-06-01 16:00:24'),
-(7, 'create_categories', 'web', '2021-06-01 16:00:24', '2021-06-01 16:00:24'),
-(8, 'read_categories', 'web', '2021-06-01 16:00:24', '2021-06-01 16:00:24'),
-(9, 'update_categories', 'web', '2021-06-01 16:00:24', '2021-06-01 16:00:24'),
-(10, 'delete_categories', 'web', '2021-06-01 16:00:24', '2021-06-01 16:00:24'),
-(11, 'print_categories', 'web', '2021-06-01 16:00:25', '2021-06-01 16:00:25'),
-(12, 'trash_categories', 'web', '2021-06-01 16:00:25', '2021-06-01 16:00:25'),
-(13, 'create_multipics', 'web', '2021-06-01 16:00:25', '2021-06-01 16:00:25'),
-(14, 'read_multipics', 'web', '2021-06-01 16:00:25', '2021-06-01 16:00:25'),
-(15, 'update_multipics', 'web', '2021-06-01 16:00:25', '2021-06-01 16:00:25'),
-(16, 'delete_multipics', 'web', '2021-06-01 16:00:25', '2021-06-01 16:00:25'),
-(17, 'print_multipics', 'web', '2021-06-01 16:00:25', '2021-06-01 16:00:25'),
-(18, 'trash_multipics', 'web', '2021-06-01 16:00:25', '2021-06-01 16:00:25'),
-(19, 'create_sliders', 'web', '2021-06-01 16:00:25', '2021-06-01 16:00:25'),
-(20, 'read_sliders', 'web', '2021-06-01 16:00:25', '2021-06-01 16:00:25'),
-(21, 'update_sliders', 'web', '2021-06-01 16:00:25', '2021-06-01 16:00:25'),
-(22, 'delete_sliders', 'web', '2021-06-01 16:00:25', '2021-06-01 16:00:25'),
-(23, 'print_sliders', 'web', '2021-06-01 16:00:25', '2021-06-01 16:00:25'),
-(24, 'trash_sliders', 'web', '2021-06-01 16:00:25', '2021-06-01 16:00:25'),
-(25, 'create_contacts', 'web', '2021-06-01 16:00:25', '2021-06-01 16:00:25'),
-(26, 'read_contacts', 'web', '2021-06-01 16:00:25', '2021-06-01 16:00:25'),
-(27, 'update_contacts', 'web', '2021-06-01 16:00:26', '2021-06-01 16:00:26'),
-(28, 'delete_contacts', 'web', '2021-06-01 16:00:26', '2021-06-01 16:00:26'),
-(29, 'print_contacts', 'web', '2021-06-01 16:00:26', '2021-06-01 16:00:26'),
-(30, 'trash_contacts', 'web', '2021-06-01 16:00:26', '2021-06-01 16:00:26'),
-(31, 'create_users', 'web', '2021-06-01 16:00:26', '2021-06-01 16:00:26'),
-(32, 'read_users', 'web', '2021-06-01 16:00:26', '2021-06-01 16:00:26'),
-(33, 'update_users', 'web', '2021-06-01 16:00:26', '2021-06-01 16:00:26'),
-(34, 'delete_users', 'web', '2021-06-01 16:00:26', '2021-06-01 16:00:26'),
-(35, 'print_users', 'web', '2021-06-01 16:00:26', '2021-06-01 16:00:26'),
-(36, 'trash_users', 'web', '2021-06-01 16:00:26', '2021-06-01 16:00:26'),
-(37, 'create_roles', 'web', '2021-06-01 16:00:26', '2021-06-01 16:00:26'),
-(38, 'read_roles', 'web', '2021-06-01 16:00:26', '2021-06-01 16:00:26'),
-(39, 'update_roles', 'web', '2021-06-01 16:00:26', '2021-06-01 16:00:26'),
-(40, 'delete_roles', 'web', '2021-06-01 16:00:27', '2021-06-01 16:00:27'),
-(41, 'print_roles', 'web', '2021-06-01 16:00:27', '2021-06-01 16:00:27'),
-(42, 'trash_roles', 'web', '2021-06-01 16:00:27', '2021-06-01 16:00:27'),
-(43, 'create_settings', 'web', '2021-06-01 16:00:27', '2021-06-01 16:00:27'),
-(44, 'read_settings', 'web', '2021-06-01 16:00:27', '2021-06-01 16:00:27'),
-(45, 'update_settings', 'web', '2021-06-01 16:00:27', '2021-06-01 16:00:27'),
-(46, 'delete_settings', 'web', '2021-06-01 16:00:27', '2021-06-01 16:00:27'),
-(47, 'print_settings', 'web', '2021-06-01 16:00:27', '2021-06-01 16:00:27'),
-(48, 'trash_settings', 'web', '2021-06-01 16:00:27', '2021-06-01 16:00:27');
+(1, 'create_brands', 'web', '2021-06-02 11:14:39', '2021-06-02 11:14:39'),
+(2, 'read_brands', 'web', '2021-06-02 11:14:39', '2021-06-02 11:14:39'),
+(3, 'update_brands', 'web', '2021-06-02 11:14:39', '2021-06-02 11:14:39'),
+(4, 'delete_brands', 'web', '2021-06-02 11:14:39', '2021-06-02 11:14:39'),
+(5, 'print_brands', 'web', '2021-06-02 11:14:39', '2021-06-02 11:14:39'),
+(6, 'trash_brands', 'web', '2021-06-02 11:14:39', '2021-06-02 11:14:39'),
+(7, 'create_categories', 'web', '2021-06-02 11:14:39', '2021-06-02 11:14:39'),
+(8, 'read_categories', 'web', '2021-06-02 11:14:39', '2021-06-02 11:14:39'),
+(9, 'update_categories', 'web', '2021-06-02 11:14:39', '2021-06-02 11:14:39'),
+(10, 'delete_categories', 'web', '2021-06-02 11:14:39', '2021-06-02 11:14:39'),
+(11, 'print_categories', 'web', '2021-06-02 11:14:39', '2021-06-02 11:14:39'),
+(12, 'trash_categories', 'web', '2021-06-02 11:14:39', '2021-06-02 11:14:39'),
+(13, 'create_users', 'web', '2021-06-02 11:14:39', '2021-06-02 11:14:39'),
+(14, 'read_users', 'web', '2021-06-02 11:14:39', '2021-06-02 11:14:39'),
+(15, 'update_users', 'web', '2021-06-02 11:14:39', '2021-06-02 11:14:39'),
+(16, 'delete_users', 'web', '2021-06-02 11:14:39', '2021-06-02 11:14:39'),
+(17, 'print_users', 'web', '2021-06-02 11:14:40', '2021-06-02 11:14:40'),
+(18, 'trash_users', 'web', '2021-06-02 11:14:40', '2021-06-02 11:14:40'),
+(19, 'create_roles', 'web', '2021-06-02 11:14:40', '2021-06-02 11:14:40'),
+(20, 'read_roles', 'web', '2021-06-02 11:14:40', '2021-06-02 11:14:40'),
+(21, 'update_roles', 'web', '2021-06-02 11:14:40', '2021-06-02 11:14:40'),
+(22, 'delete_roles', 'web', '2021-06-02 11:14:40', '2021-06-02 11:14:40'),
+(23, 'print_roles', 'web', '2021-06-02 11:14:40', '2021-06-02 11:14:40'),
+(24, 'trash_roles', 'web', '2021-06-02 11:14:40', '2021-06-02 11:14:40');
 
 -- --------------------------------------------------------
 
@@ -296,9 +283,8 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
-(1, 'super_admin', 'web', '2021-06-01 16:00:24', '2021-06-01 16:00:24'),
-(2, 'admin', 'web', '2021-06-01 16:00:30', '2021-06-01 16:00:30'),
-(3, 'test', 'web', '2021-06-01 16:03:03', '2021-06-01 16:03:03');
+(1, 'super_admin', 'web', '2021-06-02 11:14:39', '2021-06-02 11:14:39'),
+(2, 'admin', 'web', '2021-06-02 11:14:41', '2021-06-02 11:14:41');
 
 -- --------------------------------------------------------
 
@@ -339,31 +325,7 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (21, 1),
 (22, 1),
 (23, 1),
-(24, 1),
-(25, 1),
-(26, 1),
-(27, 1),
-(28, 1),
-(29, 1),
-(30, 1),
-(31, 1),
-(32, 1),
-(33, 1),
-(34, 1),
-(35, 1),
-(36, 1),
-(37, 1),
-(38, 1),
-(39, 1),
-(40, 1),
-(41, 1),
-(42, 1),
-(43, 1),
-(44, 1),
-(45, 1),
-(46, 1),
-(47, 1),
-(48, 1);
+(24, 1);
 
 -- --------------------------------------------------------
 
@@ -388,6 +350,9 @@ CREATE TABLE `settings` (
 
 CREATE TABLE `sliders` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `enabled` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -422,9 +387,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `image`, `enabled`, `email_verified_at`, `password`, `remember_token`, `last_login_at`, `last_login_ip`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'super', 'admin', 'super@admin.com', 'default.png', 1, NULL, '$2y$10$7/3qP25yqy6pCzqeHURPRutimYqDIOma7Yfri/r6NJRJctd1c1rgu', NULL, '2021-06-01 16:00:31', NULL, '2021-05-31 21:00:00', '2021-05-31 21:00:00', NULL),
-(2, 'Mustafa', 'Al-Swasi', 'mostfaswaisi93@gmail.com', 'default.png', 1, NULL, '$2y$10$rp7rKrbBVF.6IANzuzyuVO9mXQkiYqDXNggoo6.5i8Z9FxHDpYbB.', NULL, '2021-06-01 16:02:05', NULL, '2021-06-01 16:02:05', '2021-06-01 16:02:05', NULL),
-(3, 'Mustafa', 'Al-Swasi', 'admin@admin.com', 'default.png', 1, NULL, '$2y$10$TNPmzsHVyAas0EZegRiMbuLBoAUFPgUFEsbWfG4QAg8uC/qKiYWxO', NULL, '2021-06-01 16:03:22', NULL, '2021-06-01 16:03:22', '2021-06-01 16:03:22', NULL);
+(1, 'super', 'admin', 'super@admin.com', 'default.png', 1, NULL, '$2y$10$pKlt2ZKHLCfmoj6JzXDvDeWa4QsR2DLSrnCh3c2M9/HanajH6Vk7S', NULL, '2021-06-02 11:14:41', NULL, '2021-06-01 21:00:00', '2021-06-01 21:00:00', NULL),
+(2, 'Mustafa', 'Al-Swasi', 'mostfaswaisi93@gmail.com', 'ZLH9oOrxcexzVuW4u2JWYsjfRKQI7DNiHc3ggVr0.jpg', 1, NULL, '$2y$10$KhCxyrL6b11eOVbTPPuj5.UEySdXUB7jFBi4qM0bYvxN5aPkdQxta', NULL, '2021-06-02 11:16:01', NULL, '2021-06-02 11:16:01', '2021-06-02 11:16:01', NULL);
 
 --
 -- Indexes for dumped tables
@@ -595,13 +559,13 @@ ALTER TABLE `multipics`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `settings`
@@ -619,7 +583,7 @@ ALTER TABLE `sliders`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables

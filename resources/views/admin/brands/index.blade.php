@@ -11,26 +11,6 @@
                     <div class="card-header border-bottom">
                         <h4 class="card-title"><b>{{ trans('admin.brands') }}</b></h4>
                     </div>
-                    <div class="card-body mt-2">
-                        <form>
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-row mb-1">
-                                        <div class="col-lg-2">
-                                            <label for="filterStatus">{{ trans('admin.status') }}:</label>
-                                            <select id="filterStatus" class="form-control"
-                                                onchange="filter_status(this);">
-                                                <option value="" selected="selected">{{ trans('admin.all') }}</option>
-                                                <option value='1'>{{ trans('admin.active') }}</option>
-                                                <option value='0'>{{ trans('admin.inactive') }}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <hr class="my-0" />
                     <div class="table-responsive" style="padding: 10px">
                         <table id="data-table"
                             class="table table-striped table-bordered table-hover table-sm dt-responsive nowrap"
@@ -40,8 +20,7 @@
                                     <th></th>
                                     <th>#</th>
                                     <th>{{ trans('admin.name') }}</th>
-                                    <th>{{ trans('admin.price') }}</th>
-                                    <th class="status">{{ trans('admin.status') }}</th>
+                                    <th>{{ trans('admin.user') }}</th>
                                     <th>{{ trans('admin.created_at') }}</th>
                                     <th>{{ trans('admin.actions') }}</th>
                                 </tr>
@@ -61,7 +40,6 @@
 @push('scripts')
 
 @include('partials.delete')
-@include('partials.status')
 @include('partials.multi_delete')
 
 <script type="text/javascript">
@@ -85,8 +63,7 @@
                     }, searchable: false, orderable: false
                 },
                 { data: 'name_trans' },
-                { data: 'price' },
-                { data: 'enabled' },
+                { data: 'user_id' },
                 { data: 'created_at', className: 'created_at' },
                 { data: 'action', orderable: false,
                     render: function(data, type, row, meta) {
@@ -130,26 +107,6 @@
                             '<input class="custom-control-input" type="checkbox" id="checkboxSelectAll" />' +
                             '<label class="custom-control-label" for="checkboxSelectAll"></label>' +
                         '</div>'
-                }
-            },
-            {
-                "targets": 4,
-                render: function (data, type, row, meta){
-                    var $checked = $(`
-                        <div class="custom-switch-status">
-                            <div class="custom-control custom-switch custom-switch-success">
-                                <input type="checkbox" data-id="${row.id}" id="status(${row.id})"
-                                class="custom-control-input status" ${ row.enabled == 1 ? 'checked' : '' }
-                                onchange=selectStatus(${row.id}) >
-                                <label class="custom-control-label" for="status(${row.id})" title="{{ trans('admin.update_status') }}">
-                                    <span class="switch-icon-left"><i data-feather="check"></i></span>
-                                    <span class="switch-icon-right"><i data-feather="x"></i></span>
-                                </label>
-                            </div>
-                        </div>
-                    `);
-                    $checked.prop('checked', true).attr('checked', 'checked');
-                    return $checked[0].outerHTML
                 }
             } ],
             dom:  "<'row'<''l><'col-sm-8 text-center'B><''f>>" +
@@ -315,11 +272,6 @@
         });
     });
 
-    // Filter Status
-    function filter_status(enabled_filter = null){
-        enabled = enabled_filter.value;
-        $('#data-table').DataTable().ajax.url(getLocation +'?enabled='+ enabled +'&type=filter').load();
-    }
 </script>
 
 @endpush
