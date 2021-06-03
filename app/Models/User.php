@@ -19,7 +19,7 @@ class User extends Authenticatable
         'first_name', 'last_name', 'email', 'image', 'enabled', 'password',
         'last_login_at', 'last_login_ip'
     ];
-    protected $appends  = ['image_path', 'full_name', 'last_login', 'created_at_before'];
+    protected $appends  = ['image_path', 'full_name', 'last_login', 'created_date'];
     protected $hidden   = ['password', 'remember_token'];
     protected $casts    = [
         'email_verified_at' => 'datetime', 'created_at' => 'date:Y-m-d - H:i A',
@@ -37,7 +37,7 @@ class User extends Authenticatable
         return asset('images/users/' . $this->image);
     }
 
-    public function getCreatedAtBeforeAttribute()
+    public function getCreatedDateAttribute()
     {
         return Carbon::parse($this->created_at)->diffForHumans(Carbon::now());
     }

@@ -11,9 +11,21 @@ class CategoriesTableSeeder extends Seeder
     {
         Category::create([
             'name' => [
-                'ar' => 'جلسة أولى',
-                'en' => 'First Session'
-            ], 'price' => '15.00'
+                'ar' => 'أول',
+                'en' => 'First'
+            ], 'user_id' => '1'
+        ]);
+        Category::create([
+            'name' => [
+                'ar' => 'ثاني',
+                'en' => 'Second'
+            ], 'user_id' => '1'
+        ]);
+        Category::create([
+            'name' => [
+                'ar' => 'ثالث',
+                'en' => 'Third'
+            ], 'user_id' => '1'
         ]);
     }
 }

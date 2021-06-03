@@ -8,25 +8,62 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header border-bottom">
-                        <h4 class="card-title"><b>{{ trans('admin.brands') }}</b></h4>
+                    <div class="card-body">
+                        <ul class="nav nav-pills" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center active" id="brand-tab" data-toggle="tab"
+                                    href="#brand" aria-controls="brand" role="tab" aria-selected="true">
+                                    <i data-feather="list"></i><span
+                                        class="d-none d-sm-block">{{ trans('admin.brands') }}</span>
+                                </a>
+                            </li>
+                            @if(auth()->user()->can('trashlist_brands'))
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" id="trash-tab" data-toggle="tab"
+                                    href="#trash" aria-controls="trash" role="tab" aria-selected="false">
+                                    <i data-feather="info"></i><span
+                                        class="d-none d-sm-block">{{ trans('admin.trashed') }}</span>
+                                </a>
+                            </li>
+                            @endif
+                        </ul>
                     </div>
-                    <div class="table-responsive" style="padding: 10px">
-                        <table id="data-table"
-                            class="table table-striped table-bordered table-hover table-sm dt-responsive nowrap"
-                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>#</th>
-                                    <th>{{ trans('admin.name') }}</th>
-                                    <th>{{ trans('admin.user') }}</th>
-                                    <th>{{ trans('admin.created_at') }}</th>
-                                    <th>{{ trans('admin.actions') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                    <div class="tab-content">
+                        <div class="tab-pane table-responsive active" id="brand" aria-labelledby="brand-tab"
+                            role="tabpanel" style="padding: 10px">
+                            <table id="data-table"
+                                class="table table-striped table-bordered table-hover table-sm dt-responsive nowrap"
+                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>#</th>
+                                        <th>{{ trans('admin.name') }}</th>
+                                        <th>{{ trans('admin.user') }}</th>
+                                        <th>{{ trans('admin.created_at') }}</th>
+                                        <th>{{ trans('admin.actions') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane table-responsive" id="trash" aria-labelledby="trash-tab" role="tabpanel"
+                            style="padding: 10px">
+                            <table id="trash-table"
+                                class="table table-striped table-bordered table-hover table-sm dt-responsive nowrap"
+                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>{{ trans('admin.name') }}</th>
+                                        <th>{{ trans('admin.user') }}</th>
+                                        <th>{{ trans('admin.deleted_at') }}</th>
+                                        <th>{{ trans('admin.actions') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -40,6 +77,8 @@
 @push('scripts')
 
 @include('partials.delete')
+@include('partials.force')
+@include('partials.restore')
 @include('partials.multi_delete')
 
 <script type="text/javascript">
@@ -63,11 +102,15 @@
                     }, searchable: false, orderable: false
                 },
                 { data: 'name_trans' },
-                { data: 'user_id' },
+                { data: 'user',
+                    render: function(data, type, row, meta) {
+                        return "<div class='badge badge-light-primary'>"+ data +"</div>";
+                    }
+                },
                 { data: 'created_at', className: 'created_at',
                     render: function(data, type, row, meta){
                         var text1 = "<div>"+ data +" - </div>";
-                        var text2 = "<div>"+ row.created_at_before +"</div>";
+                        var text2 = "<div>"+ row.created_date +"</div>";
                         return text1 + text2;
                     }
                 },
@@ -166,6 +209,91 @@
             }
         });
 
+        $('#trash-table').DataTable({
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            drawCallback: function(settings){ feather.replace(); },
+            order: [[ 2, "desc" ]],
+            ajax: {
+                url: "{{ route('brands.trashed') }}",
+            },
+            columns: [
+                {
+                    render: function(data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }, searchable: false, orderable: false
+                },
+                { data: 'name_trans' },
+                { data: 'user',
+                    render: function(data, type, row, meta) {
+                        return "<div class='badge badge-light-primary'>"+ data +"</div>";
+                    }
+                },
+                { data: 'deleted_at', className: 'deleted_at',
+                    render: function(data, type, row, meta){
+                        var text1 = "<div>"+ data +" - </div>";
+                        var text2 = "<div>"+ row.deleted_date +"</div>";
+                        return text1 + text2;
+                    }
+                },
+                { data: 'action', orderable: false,
+                    render: function(data, type, row, meta) {
+                        // Action Buttons
+                        return (
+                            '<span>' +
+                                '<a id="'+ row.id +'" name="restore" class="item-edit restore mr-1" title="{{ trans("admin.restore") }}">' +
+                                feather.icons['corner-left-up'].toSvg({ class: 'font-small-4' }) +
+                                '</a>' +
+                            '</span>' +
+                            '<span>' +
+                                '<a id="'+ row.id +'" class="item-edit force" title="{{ trans("admin.force_delete") }}">' +
+                                feather.icons['x-circle'].toSvg({ class: 'font-small-4 mr-50' }) +
+                                '</a>' +
+                            '</span>'
+                        );
+                    }
+                }
+            ],
+            "columnDefs": [],
+            dom:  "<'row'<''l><'col-sm-8 text-center'B><''f>>" +
+                  "<'row'<'col-sm-12'tr>>" +
+                  "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            buttons: [
+                { text: '<i data-feather="refresh-ccw"></i> {{ trans("admin.refresh") }}',
+                  className: 'btn dtbtn btn-sm btn-dark',
+                  attr: { 'title': '{{ trans("admin.refresh") }}' },
+                    action: function (e, dt, node, config) {
+                        dt.ajax.reload(null, false);
+                    }
+                },
+                { extend: 'csvHtml5', charset: "UTF-8", bom: true,
+                  className: 'btn dtbtn btn-sm btn-success',
+                  text: '<i data-feather="file"></i> CSV',
+                  attr: { 'title': 'CSV' }
+                },
+                { extend: 'excelHtml5', charset: "UTF-8", bom: true,
+                  className: 'btn dtbtn btn-sm btn-success',
+                  text: '<i data-feather="file"></i> Excel',
+                  attr: { 'title': 'Excel' }
+                },
+                { text: '<i data-feather="printer"></i> {{ trans("admin.print") }}',
+                  className: '@if (auth()->user()->can("print_brands")) btn dtbtn btn-sm btn-primary @else btn dtbtn btn-sm btn-primary disabled @endif',
+                  extend: 'print', attr: { 'title': '{{ trans("admin.print") }}' }
+                },
+                { extend: 'pdfHtml5', charset: "UTF-8", bom: true,
+                  className: 'btn dtbtn btn-sm btn-danger',
+                  text: '<i data-feather="file"></i> PDF',
+                  pageSize: 'A4', attr: { 'title': 'PDF' }
+                },
+            ],
+            language: {
+                url: getDataTableLanguage(),
+                search: ' ',
+                searchPlaceholder: '{{ trans("admin.search") }}...'
+            }
+        });
+
         // Open Modal
         $(document).on('click', '#create_brand', function(){
             $('.modal-title').text("{{ trans('admin.create_brand') }}");
@@ -205,6 +333,7 @@
                     {
                         $('#brandForm')[0].reset();
                         $('#data-table').DataTable().ajax.reload();
+                        $('#trash-table').DataTable().ajax.reload();
                         $("[data-dismiss=modal]").trigger({ type: "click" });
                         var lang = "{{ app()->getLocale() }}";
                         if (lang == "ar") {
@@ -244,6 +373,7 @@
                     {
                         $('#brandForm')[0].reset();
                         $('#data-table').DataTable().ajax.reload();
+                        $('#trash-table').DataTable().ajax.reload();
                         $("[data-dismiss=modal]").trigger({ type: "click" });
                         var lang = "{{ app()->getLocale() }}";
                         if (lang == "ar") {
@@ -268,7 +398,6 @@
                 success: function(html){
                     $('#name_ar').val(html.data.name.ar);
                     $('#name_en').val(html.data.name.en);
-                    $('#price').val(html.data.price);
                     $('#hidden_id').val(html.data.id);
                     $('.modal-title').text("{{ trans('admin.edit_brand') }}");
                     $('#action_button').val("Edit");

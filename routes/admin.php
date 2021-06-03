@@ -48,3 +48,5 @@ Route::group(
 
 Route::get('/categories/trashed', [App\Http\Controllers\Admin\CategoriesController::class, 'trashed'])
     ->name('categories.trashed')->middleware('auth');
+Route::get('/brands/trashed', [App\Http\Controllers\Admin\BrandsController::class, 'trashed'])
+    ->name('brands.trashed')->middleware('auth');

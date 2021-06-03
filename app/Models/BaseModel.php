@@ -41,12 +41,12 @@ class BaseModel extends Model
         return $this->active == 1 ? "{{ trans('admin.active') }}" : "{{ trans('admin.inactive') }}";
     }
 
-    public function getCreatedAtBeforeAttribute()
+    public function getCreatedDateAttribute()
     {
         return Carbon::parse($this->created_at)->diffForHumans(Carbon::now());
     }
 
-    public function getDeletedAtBeforeAttribute()
+    public function getDeletedDateAttribute()
     {
         return Carbon::parse($this->deleted_at)->diffForHumans(Carbon::now());
     }

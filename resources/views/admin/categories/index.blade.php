@@ -110,7 +110,7 @@
                 { data: 'created_at', className: 'created_at',
                     render: function(data, type, row, meta){
                         var text1 = "<div>"+ data +" - </div>";
-                        var text2 = "<div>"+ row.created_at_before +"</div>";
+                        var text2 = "<div>"+ row.created_date +"</div>";
                         return text1 + text2;
                     }
                 },
@@ -233,7 +233,7 @@
                 { data: 'deleted_at', className: 'deleted_at',
                     render: function(data, type, row, meta){
                         var text1 = "<div>"+ data +" - </div>";
-                        var text2 = "<div>"+ row.deleted_at_before +"</div>";
+                        var text2 = "<div>"+ row.deleted_date +"</div>";
                         return text1 + text2;
                     }
                 },

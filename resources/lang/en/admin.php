@@ -53,8 +53,9 @@ return [
     'unauthorized'              => 'Unauthorized.',
     'service_unavailable'       => 'Service Unavailable.',
 
-    'delete_msg'                => 'Are you Sure?',
-    'force_msg'                 => 'Are you Sure you want to Delete Permanently?',
+    'delete_msg'                => 'Are you sure?',
+    'restore_msg'               => 'Are you sure you want to Restore Data?',
+    'force_msg'                 => 'Are you sure you want to Delete Permanently?',
     'multi_delete'              => 'Do you agree to delete the following records and their number ',
     'no_multi_data'             => 'Please select some records to delete!',
     'confirm_delete'            => 'Confirm Delete',
@@ -66,6 +67,8 @@ return [
     'added_successfully'        => 'Added Successfully',
     'updated_successfully'      => 'Updated Successfully',
     'deleted_successfully'      => 'Deleted Successfully',
+    'restore_successfully'      => 'Restore Data Successfully',
+    'forced_successfully'       => 'Forced Deleted Successfully',
 
     'create_category'           => 'Add New Category',
     'create_brand'              => 'Add New Brand',

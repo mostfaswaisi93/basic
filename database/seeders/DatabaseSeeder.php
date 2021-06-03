@@ -11,8 +11,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SpatieSeeder::class,
             UsersTableSeeder::class,
+            CategoriesTableSeeder::class,
             // ContactsTableSeeder::class,
-            // CategoriesTableSeeder::class
         ]);
     }
 }

@@ -22,16 +22,29 @@ class BrandsController extends Controller
         $brands = Brand::OrderBy('created_at', 'desc');
         if (request()->ajax()) {
             $brands = $brands->get();
-            return datatables()->of($brands)->make(true);
+            return datatables()->of($brands)
+                ->addColumn('user', function ($data) {
+                    return ucfirst($data->user->first_name) . ' ' . ucfirst($data->user->last_name);
+                })->make(true);
+        }
+        return view('admin.brands.index');
+    }
+
+    public function trashed()
+    {
+        $brands = Brand::onlyTrashed()->get();
+        if (request()->ajax()) {
+            return datatables()->of($brands)
+                ->addColumn('user', function ($data) {
+                    return ucfirst($data->user->first_name) . ' ' . ucfirst($data->user->last_name);
+                })->make(true);
         }
         return view('admin.brands.index');
     }
 
     public function store(Request $request)
     {
-        $rules = array(
-            'user_id'    =>  'required'
-        );
+        $rules = array();
 
         foreach (config('translatable.locales') as $locale) {
             $rules += ['name.' . $locale => 'required'];
@@ -45,7 +58,7 @@ class BrandsController extends Controller
 
         $request_data = array(
             'name'       =>   $request->name,
-            'user_id'    =>   $request->user_id
+            'user_id'    =>   Auth::user()->id
         );
 
         Brand::create($request_data);
@@ -63,9 +76,7 @@ class BrandsController extends Controller
 
     public function update(Request $request, Brand $brand)
     {
-        $rules = array(
-            'user_id'    =>  'required'
-        );
+        $rules = array();
 
         foreach (config('translatable.locales') as $locale) {
             $rules += ['name.' . $locale => 'required'];
@@ -79,7 +90,7 @@ class BrandsController extends Controller
 
         $request_data = array(
             'name'       =>   json_encode($request->name, JSON_UNESCAPED_UNICODE),
-            'user_id'    =>   $request->user_id
+            'user_id'    =>   Auth::user()->id
         );
 
         $brand::whereId($request->hidden_id)->update($request_data);
@@ -91,6 +102,18 @@ class BrandsController extends Controller
     {
         $brand = Brand::findOrFail($id);
         $brand->delete();
+    }
+
+    public function restore($id)
+    {
+        $brand = Brand::withTrashed()->findOrFail($id);
+        $brand->restore();
+    }
+
+    public function force($id)
+    {
+        $brand = Brand::onlyTrashed()->findOrFail($id);
+        $brand->forceDelete();
     }
 
     public function multi_delete(Request $request)

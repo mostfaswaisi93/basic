@@ -10,7 +10,7 @@ class Brand extends Model
     use HasFactory;
     protected $table        = 'brands';
     protected $fillable     = ['name', 'image', 'enabled'];
-    protected $appends      = ['image_path', 'name_trans', 'created_at_before'];
+    protected $appends      = ['image_path', 'name_trans', 'created_date'];
     public $translatable    = ['name'];
 
     public function getImagePathAttribute()

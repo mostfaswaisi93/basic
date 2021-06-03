@@ -20,9 +20,9 @@
                         $('#trash-table').DataTable().ajax.reload();
                         var lang = "{{ app()->getLocale() }}";
                         if (lang == "ar") {
-                            toastr.success('{{ trans('admin.deleted_successfully') }}');
+                            toastr.success('{{ trans('admin.forced_successfully') }}');
                         } else {
-                            toastr.success('{{ trans('admin.deleted_successfully') }}', '', {positionClass: 'toast-bottom-left'});
+                            toastr.success('{{ trans('admin.forced_successfully') }}', '', {positionClass: 'toast-bottom-left'});
                         }
                     }
                 });
