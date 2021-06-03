@@ -3,7 +3,7 @@
 return [
     'roles_structure'       => [
         'super_admin'   => [
-            'brands'            => 'c,r,u,d,p,t',
+            'brands'            => 'c,r,u,d,p,t,l',
             'categories'        => 'c,r,u,d,p,t,l',
             'multipics'         => 'c,r,u,d,p,t',
             'sliders'           => 'c,r,u,d,p,t',

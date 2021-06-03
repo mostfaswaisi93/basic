@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
             SpatieSeeder::class,
             UsersTableSeeder::class,
             CategoriesTableSeeder::class,
+            BrandsTableSeeder::class,
             // ContactsTableSeeder::class,
         ]);
     }

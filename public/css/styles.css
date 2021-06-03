@@ -55,6 +55,10 @@ label {
     width: 5% !important;
 }
 
+#data-table thead>tr>th.brand {
+    width: 12% !important;
+}
+
 #data-table thead>tr>th.status {
     width: 8% !important;
 }
@@ -79,6 +83,10 @@ label {
     width: 5% !important;
 }
 
+#trash-table thead>tr>th.brand {
+    width: 12% !important;
+}
+
 #trash-table thead>tr>th.status {
     width: 8% !important;
 }
@@ -87,7 +95,7 @@ label {
     width: 15% !important;
 }
 
-#trash-table tbody>tr>td.created_at {
+#trash-table tbody>tr>td.deleted_at {
     width: 15% !important;
 }
 

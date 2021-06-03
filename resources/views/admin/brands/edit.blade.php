@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title') {{ trans('admin.edit_user') }} @endsection
+@section('title') {{ trans('admin.edit_brand') }} @endsection
 
 @section('content')
 
@@ -7,16 +7,16 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-left mb-0">{{ trans('admin.edit_user') }}</h2>
+                <h2 class="content-header-title float-left mb-0">{{ trans('admin.edit_brand') }}</h2>
                 <div class="breadcrumb-wrapper">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
                             <a href="{{ route('admin.index') }}">{{ trans('admin.home') }}</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ route('admin.users.index') }}">{{ trans('admin.users') }}</a>
+                            <a href="{{ route('admin.brands.index') }}">{{ trans('admin.brands') }}</a>
                         </li>
-                        <li class="breadcrumb-item active">{{ trans('admin.edit_user') }}</li>
+                        <li class="breadcrumb-item active">{{ trans('admin.edit_brand') }}</li>
                     </ol>
                 </div>
             </div>
@@ -32,13 +32,13 @@
                     <div class="card-header">
                         <h4 class="card-title">
                             <i class="mr-25" data-feather='edit'></i>
-                            {{ trans('admin.edit_user') }} - {{ $user->full_name }}
+                            {{ trans('admin.edit_brand') }} - {{ $brand->name_trans }}
                         </h4>
                     </div>
                     <div class="card-content">
                         <div class="card-body">
                             @include('partials.errors')
-                            <form action="{{ route('admin.users.update', $user->id) }}" method="post"
+                            <form action="{{ route('admin.brands.update', $brand->id) }}" method="post"
                                 enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
@@ -47,34 +47,19 @@
                                         <div class="form-group">
                                             <label>{{ trans('admin.first_name') }}</label>
                                             <input id="first_name" type="text" name="first_name" class="form-control"
-                                                value="{{ $user->first_name }}"
+                                                value="{{ $brand->first_name }}"
                                                 placeholder="{{ trans('admin.first_name') }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4 col-md-4 col-12">
-                                        <div class="form-group">
-                                            <label>{{ trans('admin.last_name') }}</label>
-                                            <input id="last_name" type="text" name="last_name" class="form-control"
-                                                value="{{ $user->last_name }}"
-                                                placeholder="{{ trans('admin.last_name') }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4 col-md-4 col-12">
-                                        <div class="form-group">
-                                            <label for="email">{{ trans('admin.email') }}:</label>
-                                            <input id="email" type="email" name="email" class="form-control"
-                                                value="{{ $user->email }}" placeholder="{{ trans('admin.email') }}">
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="media mb-2">
-                                            <img src="{{ $user->image_path }}" alt="users avatar"
-                                                class="user-avatar users-avatar-shadow rounded mr-2 my-25 cursor-pointer"
-                                                height="90" width="90" />
+                                            <img src="{{ $brand->image_path }}" alt="brands avatar"
+                                                class="user-avatar brands-avatar-shadow rounded mr-2 my-25 cursor-pointer"
+                                                height="150" width="300" />
                                             <div class="media-body mt-50">
                                                 <h4 class="mb-1">
-                                                    <i data-feather="user" class="font-medium-4 mr-25"></i>
-                                                    <span class="align-middle">{{ trans('admin.user_image') }}</span>
+                                                    <i data-feather="image" class="font-medium-4 mr-25"></i>
+                                                    <span class="align-middle">{{ trans('admin.brand_image') }}</span>
                                                 </h4>
                                                 <div class="col-12 d-flex mt-1 px-0">
                                                     <label class="btn btn-primary mr-75 mb-0" for="change-picture">

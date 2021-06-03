@@ -100,6 +100,7 @@ return [
     'type'                      => 'Type',
     'language'                  => 'Language',
     'user_image'                => 'User Image',
+    'brand_image'               => 'Brand Image',
     'icon'                      => 'Icon',
     'file_upload'               => 'File Upload',
     'icon_upload'               => 'Icon Upload',

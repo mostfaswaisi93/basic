@@ -38,8 +38,8 @@
                                     <tr>
                                         <th></th>
                                         <th>#</th>
+                                        <th class="brand">{{ trans('admin.image') }}</th>
                                         <th>{{ trans('admin.name') }}</th>
-                                        <th>{{ trans('admin.user') }}</th>
                                         <th>{{ trans('admin.created_at') }}</th>
                                         <th>{{ trans('admin.actions') }}</th>
                                     </tr>
@@ -55,8 +55,8 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
+                                        <th class="brand">{{ trans('admin.image') }}</th>
                                         <th>{{ trans('admin.name') }}</th>
-                                        <th>{{ trans('admin.user') }}</th>
                                         <th>{{ trans('admin.deleted_at') }}</th>
                                         <th>{{ trans('admin.actions') }}</th>
                                     </tr>
@@ -68,7 +68,6 @@
                 </div>
             </div>
         </div>
-        @include('admin.brands.modal')
     </section>
 </div>
 
@@ -101,12 +100,12 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }, searchable: false, orderable: false
                 },
-                { data: 'name_trans' },
-                { data: 'user',
+                { data: 'image_path',
                     render: function(data, type, row, meta) {
-                        return "<div class='badge badge-light-primary'>"+ data +"</div>";
-                    }
+                        return "<img src=" + data + " width='120px' class='img-thumbnail' />";
+                    }, searchable: false, orderable: false
                 },
+                { data: 'name_trans' },
                 { data: 'created_at', className: 'created_at',
                     render: function(data, type, row, meta){
                         var text1 = "<div>"+ data +" - </div>";
@@ -120,7 +119,7 @@
                         return (
                             '<span>' +
                                 '@if(auth()->user()->can('update_brands'))' +
-                                    '<a id="'+ row.id +'" name="edit" class="item-edit edit mr-1" data-toggle="modal" data-target="#brandModal" title="{{ trans("admin.edit") }}">' +
+                                    '<a id="'+ row.id +'" href="brands/'+ row.id +'/edit" name="edit" class="item-edit edit mr-1" title="{{ trans("admin.edit") }}">' +
                                     feather.icons['edit'].toSvg({ class: 'font-small-4' }) +
                                     '</a>' +
                                 '@endif' +
@@ -195,11 +194,14 @@
                 { text: '<i data-feather="plus"></i> {{ trans("admin.create_brand") }}',
                   className: '@if (auth()->user()->can("create_brands")) btn dtbtn btn-sm btn-primary @else btn dtbtn btn-sm btn-primary disabled @endif',
                   attr: {
-                    'title': '{{ trans("admin.create_brand") }}',
-                    'data-toggle': 'modal',
-                    'data-target': '#brandModal',
-                    'name': 'create_brand',
-                    'id': 'create_brand' }
+                        'title': '{{ trans("admin.create_brand") }}',
+                        href: '{{ route("admin.brands.create") }}'
+                    },
+                    action: function (e, dt, node, config)
+                    {
+                        // href location
+                        window.location.href = '{{ route("admin.brands.create") }}';
+                    }
                 },
             ],
             language: {
@@ -224,12 +226,12 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }, searchable: false, orderable: false
                 },
-                { data: 'name_trans' },
-                { data: 'user',
+                { data: 'image_path',
                     render: function(data, type, row, meta) {
-                        return "<div class='badge badge-light-primary'>"+ data +"</div>";
-                    }
+                        return "<img src=" + data + " width='120px' class='img-thumbnail' />";
+                    }, searchable: false, orderable: false
                 },
+                { data: 'name_trans' },
                 { data: 'deleted_at', className: 'deleted_at',
                     render: function(data, type, row, meta){
                         var text1 = "<div>"+ data +" - </div>";
@@ -292,118 +294,6 @@
                 search: ' ',
                 searchPlaceholder: '{{ trans("admin.search") }}...'
             }
-        });
-
-        // Open Modal
-        $(document).on('click', '#create_brand', function(){
-            $('.modal-title').text("{{ trans('admin.create_brand') }}");
-            $('#action_button').val("Add");
-            $('#brandForm').trigger("reset");
-            $('#form_result').html('');
-            $('#action').val("Add");
-        });
-
-        // Add Data
-        $('#brandForm').on('submit', function(event){
-            event.preventDefault();
-            if($('#action').val() == 'Add')
-            {
-                var formData = new FormData(this);
-                $.ajax({
-                    url: "{{ route('admin.brands.store') }}",
-                    method: "POST",
-                    data: formData,
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function(data)
-                    {
-                        var html = '';
-                    if(data.errors)
-                    {
-                        html = '<div class="alert alert-danger">';
-                    for(var count = 0; count < data.errors.length; count++)
-                    {
-                        html += '<div class="alert-body">' + data.errors[count] + '</div>';
-                    }
-                        html += '</div>';
-                    }
-                    if(data.success)
-                    {
-                        $('#brandForm')[0].reset();
-                        $('#data-table').DataTable().ajax.reload();
-                        $('#trash-table').DataTable().ajax.reload();
-                        $("[data-dismiss=modal]").trigger({ type: "click" });
-                        var lang = "{{ app()->getLocale() }}";
-                        if (lang == "ar") {
-                            toastr.success('{{ trans('admin.added_successfully') }}');
-                        } else {
-                            toastr.success('{{ trans('admin.added_successfully') }}', '', {positionClass: 'toast-bottom-left'});
-                        }
-                    }
-                        $('#form_result').html(html);
-                    }
-                });
-            }
-            if($('#action').val() == "Edit")
-            {
-                var formData = new FormData(this);
-                $.ajax({
-                    url: "{{ route('admin.brands.update') }}",
-                    method: "POST",
-                    data: formData,
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function(data)
-                    {
-                        var html = '';
-                    if(data.errors)
-                    {
-                        html = '<div class="alert alert-danger">';
-                    for(var count = 0; count < data.errors.length; count++)
-                    {
-                        html += '<div class="alert-body">' + data.errors[count] + '</div>';
-                    }
-                        html += '</div>';
-                    }
-                    if(data.success)
-                    {
-                        $('#brandForm')[0].reset();
-                        $('#data-table').DataTable().ajax.reload();
-                        $('#trash-table').DataTable().ajax.reload();
-                        $("[data-dismiss=modal]").trigger({ type: "click" });
-                        var lang = "{{ app()->getLocale() }}";
-                        if (lang == "ar") {
-                            toastr.success('{{ trans('admin.updated_successfully') }}');
-                        } else {
-                            toastr.success('{{ trans('admin.updated_successfully') }}', '', {positionClass: 'toast-bottom-left'});
-                        }
-                    }
-                        $('#form_result').html(html);
-                    }
-                });
-            }
-        });
-
-        // Edit Data
-        $(document).on('click', '.edit', function(){
-            var id = $(this).attr('id');
-            $('#form_result').html('');
-            $.ajax({
-                url: "/admin/brands/"+ id +"/edit",
-                dataType: "json",
-                success: function(html){
-                    $('#name_ar').val(html.data.name.ar);
-                    $('#name_en').val(html.data.name.en);
-                    $('#hidden_id').val(html.data.id);
-                    $('.modal-title').text("{{ trans('admin.edit_brand') }}");
-                    $('#action_button').val("Edit");
-                    $('#action').val("Edit");
-                }
-            });
         });
     });
 

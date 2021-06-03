@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use Illuminate\Http\Request;
-use Validator;
+use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class BrandsController extends Controller
 {
@@ -23,9 +25,7 @@ class BrandsController extends Controller
         if (request()->ajax()) {
             $brands = $brands->get();
             return datatables()->of($brands)
-                ->addColumn('user', function ($data) {
-                    return ucfirst($data->user->first_name) . ' ' . ucfirst($data->user->last_name);
-                })->make(true);
+                ->make(true);
         }
         return view('admin.brands.index');
     }
@@ -35,43 +35,50 @@ class BrandsController extends Controller
         $brands = Brand::onlyTrashed()->get();
         if (request()->ajax()) {
             return datatables()->of($brands)
-                ->addColumn('user', function ($data) {
-                    return ucfirst($data->user->first_name) . ' ' . ucfirst($data->user->last_name);
-                })->make(true);
+                ->make(true);
         }
         return view('admin.brands.index');
     }
 
+    public function create()
+    {
+        return view('admin.brands.create');
+    }
+
     public function store(Request $request)
     {
-        $rules = array();
+        $rules = [];
 
         foreach (config('translatable.locales') as $locale) {
             $rules += ['name.' . $locale => 'required'];
         }
 
-        $error = Validator::make($request->all(), $rules);
+        $request->validate($rules);
+        $request_data = $request->except(['image']);
 
-        if ($error->fails()) {
-            return response()->json(['errors' => $error->errors()->all()]);
+        if ($request->image) {
+            Image::make($request->image)
+                ->resize(300, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })
+                ->save(public_path('images/brands/' . $request->image->hashName()));
+            $request_data['image'] = $request->image->hashName();
         }
 
-        $request_data = array(
-            'name'       =>   $request->name,
-            'user_id'    =>   Auth::user()->id
-        );
+        $brand = Brand::create($request_data);
 
-        Brand::create($request_data);
+        if (app()->getLocale() == 'ar') {
+            Toastr::success(__('admin.added_successfully'));
+        } else {
+            Toastr::success(__('admin.added_successfully'), '', ["positionClass" => "toast-bottom-left"]);
+        }
 
-        return response()->json(['success' => 'Data Added Successfully.']);
+        return redirect()->route('admin.brands.index');
     }
 
-    public function edit($id)
+    public function edit(Brand $brand)
     {
-        if (request()->ajax()) {
-            $data = Brand::findOrFail($id);
-            return response()->json(['data' => $data]);
-        }
+        return view('admin.brands.edit')->with('brand', $brand);
     }
 
     public function update(Request $request, Brand $brand)
@@ -113,6 +120,9 @@ class BrandsController extends Controller
     public function force($id)
     {
         $brand = Brand::onlyTrashed()->findOrFail($id);
+        if ($brand->image != 'default.png') {
+            Storage::disk('public_uploads')->delete('/brands/' . $brand->image);
+        }
         $brand->forceDelete();
     }
 

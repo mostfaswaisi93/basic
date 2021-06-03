@@ -29,6 +29,8 @@ Route::group(
 
             Route::post('brands/update', 'BrandsController@update')->name('brands.update');
             Route::get('brands/destroy/{id}', 'BrandsController@destroy');
+            Route::get('brands/force/{id}', 'BrandsController@force');
+            Route::get('brands/restore/{id}', 'BrandsController@restore');
             Route::delete('brands/destroy/all', 'BrandsController@multi_delete');
 
             // Route::post('sliders/update', 'SlidersController@update')->name('sliders.update');

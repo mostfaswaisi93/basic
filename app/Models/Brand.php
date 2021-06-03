@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Spatie\Translatable\HasTranslations;
 
-class Brand extends Model
+class Brand extends BaseModel
 {
-    use HasFactory;
+    use HasFactory, HasTranslations;
     protected $table        = 'brands';
     protected $fillable     = ['name', 'image', 'enabled'];
     protected $appends      = ['image_path', 'name_trans', 'created_date'];
