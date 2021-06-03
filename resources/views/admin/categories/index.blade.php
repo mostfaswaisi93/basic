@@ -17,13 +17,15 @@
                                         class="d-none d-sm-block">{{ trans('admin.categories') }}</span>
                                 </a>
                             </li>
+                            @if(auth()->user()->can('trashlist_categories'))
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center" id="trash-tab" data-toggle="tab"
                                     href="#trash" aria-controls="trash" role="tab" aria-selected="false">
                                     <i data-feather="info"></i><span
-                                        class="d-none d-sm-block">{{ trans('admin.trash') }}</span>
+                                        class="d-none d-sm-block">{{ trans('admin.trashed') }}</span>
                                 </a>
                             </li>
+                            @endif
                         </ul>
                     </div>
                     <div class="tab-content">
@@ -45,8 +47,8 @@
                                 <tbody></tbody>
                             </table>
                         </div>
-                        <div class="tab-pane table-responsive" id="trash" aria-labelledby="trash-tab"
-                            role="tabpanel" style="padding: 10px">
+                        <div class="tab-pane table-responsive" id="trash" aria-labelledby="trash-tab" role="tabpanel"
+                            style="padding: 10px">
                             <table id="trash-table"
                                 class="table table-striped table-bordered table-hover table-sm dt-responsive nowrap"
                                 style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -55,7 +57,7 @@
                                         <th>#</th>
                                         <th>{{ trans('admin.name') }}</th>
                                         <th>{{ trans('admin.user') }}</th>
-                                        <th>{{ trans('admin.created_at') }}</th>
+                                        <th>{{ trans('admin.deleted_at') }}</th>
                                         <th>{{ trans('admin.actions') }}</th>
                                     </tr>
                                 </thead>
@@ -75,7 +77,8 @@
 @push('scripts')
 
 @include('partials.delete')
-{{-- @include('partials.restore') --}}
+@include('partials.force')
+@include('partials.restore')
 @include('partials.multi_delete')
 
 <script type="text/javascript">
@@ -213,7 +216,7 @@
             drawCallback: function(settings){ feather.replace(); },
             order: [[ 2, "desc" ]],
             ajax: {
-                url: "{{ route('admin.categories.index') }}",
+                url: "{{ route('categories.trashed') }}",
             },
             columns: [
                 {
@@ -227,10 +230,10 @@
                         return "<div class='badge badge-light-primary'>"+ data +"</div>";
                     }
                 },
-                { data: 'created_at', className: 'created_at',
+                { data: 'deleted_at', className: 'deleted_at',
                     render: function(data, type, row, meta){
                         var text1 = "<div>"+ data +" - </div>";
-                        var text2 = "<div>"+ row.created_at_before +"</div>";
+                        var text2 = "<div>"+ row.deleted_at_before +"</div>";
                         return text1 + text2;
                     }
                 },
@@ -239,18 +242,14 @@
                         // Action Buttons
                         return (
                             '<span>' +
-                                '@if(auth()->user()->can('update_categories'))' +
-                                    '<a id="'+ row.id +'" name="edit" class="item-edit edit mr-1" data-toggle="modal" data-target="#categoryModal" title="{{ trans("admin.edit") }}">' +
-                                    feather.icons['edit'].toSvg({ class: 'font-small-4' }) +
-                                    '</a>' +
-                                '@endif' +
+                                '<a id="'+ row.id +'" name="restore" class="item-edit restore mr-1" title="{{ trans("admin.restore") }}">' +
+                                feather.icons['corner-left-up'].toSvg({ class: 'font-small-4' }) +
+                                '</a>' +
                             '</span>' +
                             '<span>' +
-                                '@if(auth()->user()->can('delete_categories'))' +
-                                    '<a id="'+ row.id +'" class="item-edit delete" title="{{ trans("admin.delete") }}">' +
-                                    feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' }) +
-                                    '</a>' +
-                                '@endif' +
+                                '<a id="'+ row.id +'" class="item-edit force" title="{{ trans("admin.force_delete") }}">' +
+                                feather.icons['x-circle'].toSvg({ class: 'font-small-4 mr-50' }) +
+                                '</a>' +
                             '</span>'
                         );
                     }
@@ -334,6 +333,7 @@
                     {
                         $('#categoryForm')[0].reset();
                         $('#data-table').DataTable().ajax.reload();
+                        $('#trash-table').DataTable().ajax.reload();
                         $("[data-dismiss=modal]").trigger({ type: "click" });
                         var lang = "{{ app()->getLocale() }}";
                         if (lang == "ar") {
@@ -373,6 +373,7 @@
                     {
                         $('#categoryForm')[0].reset();
                         $('#data-table').DataTable().ajax.reload();
+                        $('#trash-table').DataTable().ajax.reload();
                         $("[data-dismiss=modal]").trigger({ type: "click" });
                         var lang = "{{ app()->getLocale() }}";
                         if (lang == "ar") {

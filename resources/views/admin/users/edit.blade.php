@@ -102,7 +102,7 @@
                                             </h6>
                                             @php
                                             $models = ['users', 'categories', 'brands'];
-                                            $maps = ['create', 'read', 'update', 'delete', 'print', 'trash'];
+                                            $maps = ['create', 'read', 'update', 'delete', 'print', 'trash', 'trashed'];
                                             @endphp
                                             <table class="table table-striped table-borderless">
                                                 <thead class="thead-light">

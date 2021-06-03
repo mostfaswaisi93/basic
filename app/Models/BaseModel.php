@@ -11,7 +11,7 @@ class BaseModel extends Model
     use SoftDeletes;
 
     public $timestamps  = true;
-    protected $casts    = ['created_at' => 'date:Y-m-d - H:i A', 'updated_at' => 'date:Y-m-d - H:i A'];
+    protected $casts    = ['created_at' => 'date:Y-m-d - H:i A', 'updated_at' => 'date:Y-m-d - H:i A', 'deleted_at' => 'date:Y-m-d - H:i A'];
     protected $dates    = ['created_at', 'updated_at', 'deleted_at'];
 
     // Unicode DB to Arabic
@@ -44,5 +44,10 @@ class BaseModel extends Model
     public function getCreatedAtBeforeAttribute()
     {
         return Carbon::parse($this->created_at)->diffForHumans(Carbon::now());
+    }
+
+    public function getDeletedAtBeforeAttribute()
+    {
+        return Carbon::parse($this->deleted_at)->diffForHumans(Carbon::now());
     }
 }

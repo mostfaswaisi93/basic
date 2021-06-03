@@ -12,7 +12,7 @@ class Category extends BaseModel
 
     protected $table        = 'categories';
     protected $fillable     = ['name', 'user_id', 'enabled'];
-    protected $appends      = ['name_trans', 'created_at_before'];
+    protected $appends      = ['name_trans', 'created_at_before', 'deleted_at_before'];
     public $translatable    = ['name'];
 
     public function user()

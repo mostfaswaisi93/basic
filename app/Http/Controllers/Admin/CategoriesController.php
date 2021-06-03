@@ -31,6 +31,18 @@ class CategoriesController extends Controller
         return view('admin.categories.index');
     }
 
+    public function trashed()
+    {
+        $categories = Category::onlyTrashed()->get();
+        if (request()->ajax()) {
+            return datatables()->of($categories)
+                ->addColumn('user', function ($data) {
+                    return ucfirst($data->user->first_name) . ' ' . ucfirst($data->user->last_name);
+                })->make(true);
+        }
+        return view('admin.categories.index');
+    }
+
     public function store(Request $request)
     {
         $rules = array();
@@ -78,7 +90,8 @@ class CategoriesController extends Controller
         }
 
         $request_data = array(
-            'name'       =>   json_encode($request->name, JSON_UNESCAPED_UNICODE)
+            'name'       =>   json_encode($request->name, JSON_UNESCAPED_UNICODE),
+            'user_id'    =>   Auth::user()->id
         );
 
         $category::whereId($request->hidden_id)->update($request_data);
@@ -94,7 +107,13 @@ class CategoriesController extends Controller
 
     public function restore($id)
     {
-        $category = Category::onlyTrashed()->find($id);
+        $category = Category::withTrashed()->findOrFail($id);
+        $category->restore();
+    }
+
+    public function force($id)
+    {
+        $category = Category::onlyTrashed()->findOrFail($id);
         $category->forceDelete();
     }
 

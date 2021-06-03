@@ -77,14 +77,14 @@
                 </a>
             </li>
             @endif
-            @if (auth()->user()->can('read_sliders'))
+            {{-- @if (auth()->user()->can('read_sliders'))
             <li {{ request()->route()->getName() === 'admin.sliders.index' ? 'class=active' : '' }}>
                 <a href="{{ route('admin.sliders.index') }}" class="d-flex align-items-center">
                     <i data-feather='sliders'></i>
                     <span class="menu-title text-truncate">{{ trans('admin.sliders') }}</span>
                 </a>
             </li>
-            @endif
+            @endif --}}
             @if (auth()->user()->can('read_contacts'))
             <li {{ request()->route()->getName() === 'admin.contacts.index' ? 'class=active' : '' }}>
                 <a href="{{ route('admin.contacts.index') }}" class="d-flex align-items-center">

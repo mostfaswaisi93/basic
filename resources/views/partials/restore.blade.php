@@ -1,6 +1,6 @@
 <script type="text/javascript">
-    // Delete
-    $(document).on('click', '.delete', function(){
+    // Restore Data
+    $(document).on('click', '.restore', function(){
         id = $(this).attr('id');
         swal({
             title: "{{ trans('admin.delete_msg') }}",

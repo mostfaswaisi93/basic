@@ -43,6 +43,7 @@
                     data: 'ids=' + string_ids,
                     success: function(data){
                         $('#data-table').DataTable().ajax.reload();
+                        $('#trash-table').DataTable().ajax.reload();
                         var lang = "{{ app()->getLocale() }}";
                         if (lang == "ar") {
                             toastr.success('{{ trans('admin.deleted_successfully') }}');

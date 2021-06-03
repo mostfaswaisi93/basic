@@ -1,9 +1,9 @@
 <script type="text/javascript">
-    // Delete
-    $(document).on('click', '.delete', function(){
+    // Force Delete
+    $(document).on('click', '.force', function(){
         id = $(this).attr('id');
         swal({
-            title: "{{ trans('admin.delete_msg') }}",
+            title: "{{ trans('admin.force_msg') }}",
             type: 'warning',
             showCloseButton: true,
             showCancelButton: true,
@@ -14,7 +14,7 @@
         }).then(function(result){
             if(result.value){
                 $.ajax({
-                    url: getLocation + "/destroy/" + id,
+                    url: getLocation + "/force/" + id,
                     success: function(data){
                         $('#data-table').DataTable().ajax.reload();
                         $('#trash-table').DataTable().ajax.reload();

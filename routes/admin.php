@@ -15,7 +15,7 @@ Route::group(
             Route::resources([
                 'categories'        => CategoriesController::class,
                 'brands'            => BrandsController::class,
-                'sliders'           => SlidersController::class,
+                // 'sliders'           => SlidersController::class,
                 'contacts'          => ContactsController::class,
                 'users'             => UsersController::class,
                 'settings'          => SettingsController::class
@@ -23,6 +23,7 @@ Route::group(
 
             Route::post('categories/update', 'CategoriesController@update')->name('categories.update');
             Route::get('categories/destroy/{id}', 'CategoriesController@destroy');
+            Route::get('categories/force/{id}', 'CategoriesController@force');
             Route::get('categories/restore/{id}', 'CategoriesController@restore');
             Route::delete('categories/destroy/all', 'CategoriesController@multi_delete');
 
@@ -30,9 +31,9 @@ Route::group(
             Route::get('brands/destroy/{id}', 'BrandsController@destroy');
             Route::delete('brands/destroy/all', 'BrandsController@multi_delete');
 
-            Route::post('sliders/update', 'SlidersController@update')->name('sliders.update');
-            Route::get('sliders/destroy/{id}', 'SlidersController@destroy');
-            Route::delete('sliders/destroy/all', 'SlidersController@multi_delete');
+            // Route::post('sliders/update', 'SlidersController@update')->name('sliders.update');
+            // Route::get('sliders/destroy/{id}', 'SlidersController@destroy');
+            // Route::delete('sliders/destroy/all', 'SlidersController@multi_delete');
 
             Route::get('contacts/destroy/{id}', 'ContactsController@destroy');
 
@@ -44,3 +45,6 @@ Route::group(
         });
     }
 );
+
+Route::get('/categories/trashed', [App\Http\Controllers\Admin\CategoriesController::class, 'trashed'])
+    ->name('categories.trashed')->middleware('auth');
