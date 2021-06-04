@@ -31,6 +31,16 @@ class UsersController extends Controller
         return view('admin.users.index');
     }
 
+    public function trashed()
+    {
+        $users = User::onlyTrashed()->get();
+        if (request()->ajax()) {
+            return datatables()->of($users)
+                ->make(true);
+        }
+        return view('admin.users.index');
+    }
+
     public function create()
     {
         return view('admin.users.create');
@@ -117,10 +127,22 @@ class UsersController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
+        $user->delete();
+    }
+
+    public function restore($id)
+    {
+        $user = User::withTrashed()->findOrFail($id);
+        $user->restore();
+    }
+
+    public function force($id)
+    {
+        $user = User::onlyTrashed()->findOrFail($id);
         if ($user->image != 'default.png') {
             Storage::disk('public_uploads')->delete('/users/' . $user->image);
         }
-        $user->delete();
+        $user->forceDelete();
     }
 
     public function multi_delete(Request $request)

@@ -8,7 +8,7 @@ return [
             'multipics'         => 'c,r,u,d,p,t',
             'sliders'           => 'c,r,u,d,p,t',
             'contacts'          => 'c,r,u,d,p,t',
-            'users'             => 'c,r,u,d,p,t',
+            'users'             => 'c,r,u,d,p,t,l',
             // 'settings'          => 'c,r,u,d,p,t',
         ],
         'admin' => []

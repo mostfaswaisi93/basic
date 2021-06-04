@@ -83,26 +83,37 @@ class BrandsController extends Controller
 
     public function update(Request $request, Brand $brand)
     {
-        $rules = array();
+        $rules = [];
 
         foreach (config('translatable.locales') as $locale) {
             $rules += ['name.' . $locale => 'required'];
         }
 
-        $error = Validator::make($request->all(), $rules);
+        $request->validate($rules);
+        $request_data = $request->except(['image']);
 
-        if ($error->fails()) {
-            return response()->json(['errors' => $error->errors()->all()]);
+        if ($request->image) {
+            if ($brand->image != 'default.png') {
+                Storage::disk('public_uploads')->delete('/brands/' . $brand->image);
+            }
+
+            Image::make($request->image)
+                ->resize(300, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })
+                ->save(public_path('images/brands/' . $request->image->hashName()));
+            $request_data['image'] = $request->image->hashName();
         }
 
-        $request_data = array(
-            'name'       =>   json_encode($request->name, JSON_UNESCAPED_UNICODE),
-            'user_id'    =>   Auth::user()->id
-        );
+        $brand->update($request_data);
 
-        $brand::whereId($request->hidden_id)->update($request_data);
+        if (app()->getLocale() == 'ar') {
+            Toastr::success(__('admin.updated_successfully'));
+        } else {
+            Toastr::success(__('admin.updated_successfully'), '', ["positionClass" => "toast-bottom-left"]);
+        }
 
-        return response()->json(['success' => 'Data is Successfully Updated.']);
+        return redirect()->route('admin.brands.index');
     }
 
     public function destroy($id)

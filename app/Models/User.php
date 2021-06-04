@@ -19,11 +19,11 @@ class User extends Authenticatable
         'first_name', 'last_name', 'email', 'image', 'enabled', 'password',
         'last_login_at', 'last_login_ip'
     ];
-    protected $appends  = ['image_path', 'full_name', 'last_login', 'created_date'];
+    protected $appends  = ['image_path', 'full_name', 'last_login', 'created_date', 'deleted_date'];
     protected $hidden   = ['password', 'remember_token'];
     protected $casts    = [
         'email_verified_at' => 'datetime', 'created_at' => 'date:Y-m-d - H:i A',
-        'updated_at' => 'date:Y-m-d - H:i A', 'last_login_at' => 'date:Y-m-d - H:i A'
+        'updated_at' => 'date:Y-m-d - H:i A', 'deleted_at' => 'date:Y-m-d - H:i A', 'last_login_at' => 'date:Y-m-d - H:i A'
     ];
     protected $dates    = ['created_at', 'updated_at', 'deleted_at', 'last_login_at'];
 
@@ -40,6 +40,11 @@ class User extends Authenticatable
     public function getCreatedDateAttribute()
     {
         return Carbon::parse($this->created_at)->diffForHumans(Carbon::now());
+    }
+
+    public function getDeletedDateAttribute()
+    {
+        return Carbon::parse($this->deleted_at)->diffForHumans(Carbon::now());
     }
 
     public function getLastLoginAttribute()

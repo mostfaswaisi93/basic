@@ -27,7 +27,6 @@ Route::group(
             Route::get('categories/restore/{id}', 'CategoriesController@restore');
             Route::delete('categories/destroy/all', 'CategoriesController@multi_delete');
 
-            Route::post('brands/update', 'BrandsController@update')->name('brands.update');
             Route::get('brands/destroy/{id}', 'BrandsController@destroy');
             Route::get('brands/force/{id}', 'BrandsController@force');
             Route::get('brands/restore/{id}', 'BrandsController@restore');
@@ -40,6 +39,8 @@ Route::group(
             Route::get('contacts/destroy/{id}', 'ContactsController@destroy');
 
             Route::get('users/destroy/{id}', 'UsersController@destroy');
+            Route::get('users/force/{id}', 'UsersController@force');
+            Route::get('users/restore/{id}', 'UsersController@restore');
             Route::delete('users/destroy/all', 'UsersController@multi_delete');
 
             Route::get('settings', 'SettingsController@index')->name('settings.index');
@@ -52,3 +53,5 @@ Route::get('/categories/trashed', [App\Http\Controllers\Admin\CategoriesControll
     ->name('categories.trashed')->middleware('auth');
 Route::get('/brands/trashed', [App\Http\Controllers\Admin\BrandsController::class, 'trashed'])
     ->name('brands.trashed')->middleware('auth');
+Route::get('/users/trashed', [App\Http\Controllers\Admin\UsersController::class, 'trashed'])
+    ->name('users.trashed')->middleware('auth');

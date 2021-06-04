@@ -43,18 +43,21 @@
                                 @csrf
                                 @method('put')
                                 <div class="row mt-1">
-                                    <div class="col-xl-4 col-md-4 col-12">
+                                    @foreach (config('translatable.locales') as $locale)
+                                    <div class="col-xl-6 col-md-6 col-12">
                                         <div class="form-group">
-                                            <label>{{ trans('admin.first_name') }}</label>
-                                            <input id="first_name" type="text" name="first_name" class="form-control"
-                                                value="{{ $brand->first_name }}"
-                                                placeholder="{{ trans('admin.first_name') }}">
+                                            <label for="name">{{ trans('admin.' . $locale . '.name') }}</label>
+                                            <input id="name[{{ $locale }}]" type="text" name="name[{{ $locale }}]"
+                                                class="form-control"
+                                                value="{{ old('name.' . $locale, $brand->getTranslation('name', $locale)) }}"
+                                                placeholder="{{ trans('admin.' . $locale . '.name') }}">
                                         </div>
                                     </div>
+                                    @endforeach
                                     <div class="col-12">
                                         <div class="media mb-2">
                                             <img src="{{ $brand->image_path }}" alt="brands avatar"
-                                                class="user-avatar brands-avatar-shadow rounded mr-2 my-25 cursor-pointer"
+                                                class="user-avatar users-avatar-shadow rounded mr-2 my-25 cursor-pointer"
                                                 height="150" width="300" />
                                             <div class="media-body mt-50">
                                                 <h4 class="mb-1">
