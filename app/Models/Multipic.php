@@ -3,12 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class Multipic extends Model
+class Multipic extends BaseModel
 {
     use HasFactory;
-    protected $fillable = [
-        'image',
-    ];
+    protected $table        = 'multipics';
+    protected $fillable     = ['image', 'enabled'];
+    protected $appends      = ['image_path', 'created_date', 'deleted_date'];
+
+    public function getImagePathAttribute()
+    {
+        return asset('images/multipics/' . $this->image);
+    }
 }

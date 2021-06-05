@@ -118,6 +118,7 @@ return [
 
     'categories'                => 'Categories',
     'brands'                    => 'Brands',
+    'multipics'                 => 'Multipics',
     'notifications'             => 'Notifications',
     'contacts'                  => 'Contacts',
     'system_constants'          => 'System Constants',

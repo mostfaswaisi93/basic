@@ -15,6 +15,7 @@ Route::group(
             Route::resources([
                 'categories'        => CategoriesController::class,
                 'brands'            => BrandsController::class,
+                'multipics'         => MultipicsController::class,
                 // 'sliders'           => SlidersController::class,
                 'contacts'          => ContactsController::class,
                 'users'             => UsersController::class,

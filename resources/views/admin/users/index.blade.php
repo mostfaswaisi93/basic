@@ -13,7 +13,7 @@
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center active" id="user-tab" data-toggle="tab"
                                     href="#user" aria-controls="user" role="tab" aria-selected="true">
-                                    <i data-feather="list"></i><span
+                                    <i data-feather="users"></i><span
                                         class="d-none d-sm-block">{{ trans('admin.users') }}</span>
                                 </a>
                             </li>

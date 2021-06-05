@@ -77,12 +77,20 @@
                 </a>
             </li>
             @endif
+            @if (auth()->user()->can('read_multipics'))
+            <li {{ request()->route()->getName() === 'admin.multipics.index' ? 'class=active' : '' }}>
+                <a href="{{ route('admin.multipics.index') }}" class="d-flex align-items-center">
+                    <i data-feather='image'></i>
+                    <span class="menu-title text-truncate">{{ trans('admin.multipics') }}</span>
+                </a>
+            </li>
+            @endif
             {{-- @if (auth()->user()->can('read_sliders'))
             <li {{ request()->route()->getName() === 'admin.sliders.index' ? 'class=active' : '' }}>
-                <a href="{{ route('admin.sliders.index') }}" class="d-flex align-items-center">
-                    <i data-feather='sliders'></i>
-                    <span class="menu-title text-truncate">{{ trans('admin.sliders') }}</span>
-                </a>
+            <a href="{{ route('admin.sliders.index') }}" class="d-flex align-items-center">
+                <i data-feather='sliders'></i>
+                <span class="menu-title text-truncate">{{ trans('admin.sliders') }}</span>
+            </a>
             </li>
             @endif --}}
             @if (auth()->user()->can('read_contacts'))
@@ -113,5 +121,3 @@
     </div>
 </div>
 <!-- END: Sidebar -->
-
-@include('admin.partials.master')

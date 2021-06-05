@@ -20,6 +20,9 @@ return [
     'refresh'                   => 'تحديث',
     'delete'                    => 'حذف',
     'trash'                     => 'حذف الكل',
+    'restore'                   => 'استرجاع',
+    'force_delete'              => 'حذف نهائي',
+    'trashed'                   => 'قائمة المحذوفات',
     'search'                    => 'بحث',
     'reset'                     => 'تفريغ',
     'show'                      => 'عرض',
@@ -51,6 +54,8 @@ return [
     'service_unavailable'       => 'الخدمة غير متوفرة.',
 
     'delete_msg'                => 'هل أنت متأكد من ذلك؟',
+    'restore_msg'               => 'هل أنت متأكد أنك تريد استعادة البيانات؟',
+    'force_msg'                 => 'هل أنت متأكد من أنك تريد الحذف نهائيًا؟',
     'multi_delete'              => 'هل أنت موافق على حذف السجلات التالية وعددها ',
     'no_multi_data'             => 'الرجاء تحديد بعض السجلات لحذفها!',
     'confirm_delete'            => 'تأكيد الحذف',
@@ -62,10 +67,18 @@ return [
     'added_successfully'        => 'تم إضافة البيانات بنجاح',
     'updated_successfully'      => 'تم تحديث البيانات بنجاح',
     'deleted_successfully'      => 'تم حذف البيانات بنجاح',
+    'restore_successfully'      => 'تمت استعادة البيانات بنجاح',
+    'forced_successfully'       => 'تم الحذف النهائي بنجاح',
 
+    'create_category'           => 'إضافة قسم جديد',
+    'create_brand'              => 'إضافة علامة تجارية جديدة',
+    'create_constant'           => 'إضافة ثابت جديد',
     'create_role'               => 'إضافة دور جديد',
     'create_user'               => 'إضافة مستخدم جديد',
 
+    'edit_category'             => 'تعديل بيانات القسم',
+    'edit_brand'                => 'تعديل بيانات العلامة التجارية',
+    'edit_constant'             => 'تعديل بيانات الثابت',
     'edit_role'                 => 'تعديل بيانات الدور',
     'edit_user'                 => 'تعديل بيانات المستخدم',
 
@@ -87,6 +100,7 @@ return [
     'type'                      => 'النوع',
     'language'                  => 'اللغة',
     'user_image'                => 'صورة مستخدم',
+    'brand_image'               => 'صورة علامة تجارية',
     'icon'                      => 'الأيقونة',
     'file_upload'               => 'استعراض',
     'icon_upload'               => 'إضافة أيقونة',
@@ -102,6 +116,10 @@ return [
     'status_changed'            => 'تم تحديث الحالة بنجاح',
     'status_not_changed'        => 'الحالة لم يتم تحديثها',
 
+    'categories'                => 'الأقسام',
+    'brands'                    => 'العلامات التجارية',
+    'multipics'                 => 'صور متعددة',
+    'notifications'             => 'التنبيهات',
     'contacts'                  => 'رسائل تواصل معنا',
     'system_constants'          => 'ثوابت النظام',
     'constants'                 => 'الثوابت',
@@ -114,6 +132,8 @@ return [
     'users_management'          => 'إدارة المستخدمين',
     'users_count'               => 'عدد المستخدمين',
 
+    'category'                  => 'القسم',
+    'brand'                     => 'العلامة التجارية',
     'constant'                  => 'الثابت',
     'role'                      => 'دور',
     'user'                      => 'مستخدم',
@@ -131,6 +151,7 @@ return [
     'description'               => 'الوصف',
     'notes'                     => 'ملاحظات',
     'created_at'                => 'تاريخ الإنشاء',
+    'deleted_at'                => 'تاريخ الحذف',
     'total'                     => 'المجموع',
     'price'                     => 'السعر',
     'currency'                  => 'العملة',
@@ -151,6 +172,7 @@ return [
     'no_messages'               => 'لا يوجد رسائل جديدة',
     'read_all_messages'         => 'قراءة كل الرسائل',
     'read_all_notifications'    => 'قراءة كل الاشعارات',
+    'all_roles'                 => 'كل الأدوار',
 
     'ar'                        => [
         'name'          => 'الاسم باللغة العربية',

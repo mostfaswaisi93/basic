@@ -13,7 +13,7 @@
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center active" id="brand-tab" data-toggle="tab"
                                     href="#brand" aria-controls="brand" role="tab" aria-selected="true">
-                                    <i data-feather="list"></i><span
+                                    <i data-feather="image"></i><span
                                         class="d-none d-sm-block">{{ trans('admin.brands') }}</span>
                                 </a>
                             </li>

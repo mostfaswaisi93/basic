@@ -1,325 +1,272 @@
-@extends('layouts.admin')
+@include('admin.partials.header')
+@include('admin.partials.sidebar')
+
+<link rel="stylesheet" type="text/css" href="{{ url('backend/app-assets/vendors/css/extensions/jstree.min.css') }}">
+
+@if (app()->getLocale() == 'en')
+
+<link rel="stylesheet" type="text/css"
+    href="{{ url('backend/app-assets/css/plugins/extensions/ext-component-tree.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url('backend/app-assets/css/pages/app-file-manager.css') }}">
+
+@else
+
+<link rel="stylesheet" type="text/css"
+    href="{{ url('backend/app-assets/css-rtl/plugins/extensions/ext-component-tree.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url('backend/app-assets/css-rtl/pages/app-file-manager.css') }}">
+
+@endif
+
 @section('title') {{ trans('admin.multipics') }} @endsection
-
-@section('content')
-
-<div class="content-body">
-    <section>
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header border-bottom">
-                        <h4 class="card-title"><b>{{ trans('admin.multipics') }}</b></h4>
-                    </div>
-                    <div class="card-body mt-2">
-                        <form>
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-row mb-1">
-                                        <div class="col-lg-2">
-                                            <label for="filterStatus">{{ trans('admin.status') }}:</label>
-                                            <select id="filterStatus" class="form-control"
-                                                onchange="filter_status(this);">
-                                                <option value="" selected="selected">{{ trans('admin.all') }}</option>
-                                                <option value='1'>{{ trans('admin.active') }}</option>
-                                                <option value='0'>{{ trans('admin.inactive') }}</option>
-                                            </select>
-                                        </div>
+<div class="app-content content file-manager-application">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-area-wrapper">
+        <div class="sidebar-left">
+            <div class="sidebar">
+                <div class="sidebar-file-manager">
+                    <div class="sidebar-inner">
+                        <div class="dropdown dropdown-actions">
+                            <button class="btn btn-primary add-file-btn text-center btn-block" type="button"
+                                id="addNewFile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <span class="align-middle">Add New</span>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="addNewFile">
+                                <div class="dropdown-item" data-toggle="modal" data-target="#new-folder-modal">
+                                    <div class="mb-0">
+                                        <i data-feather="folder" class="mr-25"></i>
+                                        <span class="align-middle">Folder</span>
+                                    </div>
+                                </div>
+                                <div class="dropdown-item">
+                                    <div class="mb-0" for="file-upload">
+                                        <i data-feather="upload-cloud" class="mr-25"></i>
+                                        <span class="align-middle">File Upload</span>
+                                        <input type="file" id="file-upload" hidden />
+                                    </div>
+                                </div>
+                                <div class="dropdown-item">
+                                    <div for="folder-upload" class="mb-0">
+                                        <i data-feather="upload-cloud" class="mr-25"></i>
+                                        <span class="align-middle">Folder Upload</span>
+                                        <input type="file" id="folder-upload" webkitdirectory mozdirectory hidden />
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                    <hr class="my-0" />
-                    <div class="table-responsive" style="padding: 10px">
-                        <table id="data-table"
-                            class="table table-striped table-bordered table-hover table-sm dt-responsive nowrap"
-                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>#</th>
-                                    <th>{{ trans('admin.name') }}</th>
-                                    <th>{{ trans('admin.price') }}</th>
-                                    <th class="status">{{ trans('admin.status') }}</th>
-                                    <th>{{ trans('admin.created_at') }}</th>
-                                    <th>{{ trans('admin.actions') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                </div>
+
+            </div>
+        </div>
+        <div class="content-right">
+            <div class="content-wrapper">
+                <div class="content-header row">
+                </div>
+                <div class="content-body">
+                    <div class="body-content-overlay"></div>
+
+                    <div class="file-manager-main-content">
+                        <div class="file-manager-content-header d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <div class="sidebar-toggle d-block d-xl-none float-left align-middle ml-1">
+                                    <i data-feather="menu" class="font-medium-5"></i>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="file-actions">
+                                    <i data-feather="trash"
+                                        class="font-medium-2 cursor-pointer d-sm-inline-block d-none mr-50"></i>
+                                </div>
+                                <div class="btn-group btn-group-toggle view-toggle ml-50" data-toggle="buttons">
+                                    <label class="btn btn-outline-primary p-50 btn-sm active">
+                                        <input type="radio" name="view-btn-radio" data-view="grid" checked />
+                                        <i data-feather="grid"></i>
+                                    </label>
+                                    <label class="btn btn-outline-primary p-50 btn-sm">
+                                        <input type="radio" name="view-btn-radio" data-view="list" />
+                                        <i data-feather="list"></i>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="file-manager-content-body">
+                            <div class="view-container">
+                                <h6 class="files-section-title mt-25 mb-75">Folders</h6>
+                                <div class="files-header">
+                                    <h6 class="font-weight-bold mb-0">Filename</h6>
+                                    <div>
+                                        <h6 class="font-weight-bold file-item-size d-inline-block mb-0">Size</h6>
+                                        <h6 class="font-weight-bold file-last-modified d-inline-block mb-0">Last
+                                            modified</h6>
+                                        <h6 class="font-weight-bold d-inline-block mr-1 mb-0">Actions</h6>
+                                    </div>
+                                </div>
+                                <div class="card file-manager-item folder level-up">
+                                    <div class="card-img-top file-logo-wrapper">
+                                        <div class="d-flex align-items-center justify-content-center w-100">
+                                            <i data-feather="arrow-up"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-body pl-2 pt-0 pb-1">
+                                        <div class="content-wrapper">
+                                            <p class="card-text file-name mb-0">...</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card file-manager-item folder">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck1" />
+                                        <label class="custom-control-label" for="customCheck1"></label>
+                                    </div>
+                                    <div class="card-img-top file-logo-wrapper">
+                                        <div class="dropdown float-right">
+                                            <i data-feather="more-vertical" class="toggle-dropdown mt-n25"></i>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-center w-100">
+                                            <i data-feather="folder"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="content-wrapper">
+                                            <p class="card-text file-name mb-0">Projects</p>
+                                            <p class="card-text file-size mb-0">2gb</p>
+                                            <p class="card-text file-date">01 may 2019</p>
+                                        </div>
+                                        <small class="file-accessed text-muted">Last accessed: 21 hours ago</small>
+                                    </div>
+                                </div>
+                                <div class="card file-manager-item folder">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                                        <label class="custom-control-label" for="customCheck2"></label>
+                                    </div>
+                                    <div class="card-img-top file-logo-wrapper">
+                                        <div class="dropdown float-right">
+                                            <i data-feather="more-vertical" class="toggle-dropdown mt-n25"></i>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-center w-100">
+                                            <i data-feather="folder"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="content-wrapper">
+                                            <p class="card-text file-name mb-0">Design</p>
+                                            <p class="card-text file-size mb-0">500mb</p>
+                                            <p class="card-text file-date">05 may 2019</p>
+                                        </div>
+                                        <small class="file-accessed text-muted">Last accessed: 18 hours ago</small>
+                                    </div>
+                                </div>
+                                <div class="card file-manager-item folder">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck3" />
+                                        <label class="custom-control-label" for="customCheck3"></label>
+                                    </div>
+                                    <div class="card-img-top file-logo-wrapper">
+                                        <div class="dropdown float-right">
+                                            <i data-feather="more-vertical" class="toggle-dropdown mt-n25"></i>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-center w-100">
+                                            <i data-feather="folder"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="content-wrapper">
+                                            <p class="card-text file-name mb-0">UI Kit</p>
+                                            <p class="card-text file-size mb-0">200mb</p>
+                                            <p class="card-text file-date">01 may 2019</p>
+                                        </div>
+                                        <small class="file-accessed text-muted">Last accessed: 2 days ago</small>
+                                    </div>
+                                </div>
+                                <div class="card file-manager-item folder">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck4" />
+                                        <label class="custom-control-label" for="customCheck4"></label>
+                                    </div>
+                                    <div class="card-img-top file-logo-wrapper">
+                                        <div class="dropdown float-right">
+                                            <i data-feather="more-vertical" class="toggle-dropdown mt-n25"></i>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-center w-100">
+                                            <i data-feather="folder"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="content-wrapper">
+                                            <p class="card-text file-name mb-0">Documents</p>
+                                            <p class="card-text file-size mb-0">50.3mb</p>
+                                            <p class="card-text file-date">10 may 2019</p>
+                                        </div>
+                                        <small class="file-accessed text-muted">Last accessed: 6 days ago</small>
+                                    </div>
+                                </div>
+
+
+                                <div class="d-none flex-grow-1 align-items-center no-result mb-3">
+                                    <i data-feather="alert-circle" class="mr-50"></i>
+                                    No Results
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dropdown-menu dropdown-menu-right file-dropdown">
+                        <a class="dropdown-item" href="javascript:void(0);">
+                            <i data-feather="eye" class="align-middle mr-50"></i>
+                            <span class="align-middle">Preview</span>
+                        </a>
+                        <a class="dropdown-item" href="javascript:void(0);">
+                            <i data-feather="user-plus" class="align-middle mr-50"></i>
+                            <span class="align-middle">Share</span>
+                        </a>
+                        <a class="dropdown-item" href="javascript:void(0);">
+                            <i data-feather="copy" class="align-middle mr-50"></i>
+                            <span class="align-middle">Make a copy</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="javascript:void(0);">
+                            <i data-feather="edit" class="align-middle mr-50"></i>
+                            <span class="align-middle">Rename</span>
+                        </a>
+                        <a class="dropdown-item" href="javascript:void(0);" data-toggle="modal"
+                            data-target="#app-file-manager-info-sidebar">
+                            <i data-feather="info" class="align-middle mr-50"></i>
+                            <span class="align-middle">Info</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="javascript:void(0);">
+                            <i data-feather="trash" class="align-middle mr-50"></i>
+                            <span class="align-middle">Delete</span>
+                        </a>
+                        <a class="dropdown-item" href="javascript:void(0);">
+                            <i data-feather="alert-circle" class="align-middle mr-50"></i>
+                            <span class="align-middle">Report</span>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-        @include('admin.multipics.modal')
-    </section>
+    </div>
 </div>
+<br> <br>
+@include('admin.partials.footer')
 
-@endsection
+<script src="{{ url('backend/app-assets/vendors/js/extensions/jstree.min.js') }}"></script>
+<script src="{{ url('backend/app-assets/js/scripts/pages/app-file-manager.js') }}"></script>
 
 @push('scripts')
 
 @include('partials.delete')
-@include('partials.status')
+@include('partials.force')
+@include('partials.restore')
 @include('partials.multi_delete')
 
 <script type="text/javascript">
     var getLocation = "multipics";
-    $(document).ready(function(){
-        // DataTable
-        $('#data-table').DataTable({
-            processing: true,
-            serverSide: true,
-            responsive: true,
-            drawCallback: function(settings){ feather.replace(); },
-            order: [[ 2, "desc" ]],
-            ajax: {
-                url: "{{ route('admin.multipics.index') }}",
-            },
-            columns: [
-                { data: 'id' },
-                {
-                    render: function(data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
-                    }, searchable: false, orderable: false
-                },
-                { data: 'name_trans' },
-                { data: 'price' },
-                { data: 'enabled' },
-                { data: 'created_at', className: 'created_at' },
-                { data: 'action', orderable: false,
-                    render: function(data, type, row, meta) {
-                        // Action Buttons
-                        return (
-                            '<span>' +
-                                '@if(auth()->user()->can('update_multipics'))' +
-                                    '<a id="'+ row.id +'" name="edit" class="item-edit edit mr-1" data-toggle="modal" data-target="#multipicModal" title="{{ trans("admin.edit") }}">' +
-                                    feather.icons['edit'].toSvg({ class: 'font-small-4' }) +
-                                    '</a>' +
-                                '@endif' +
-                            '</span>' +
-                            '<span>' +
-                                '@if(auth()->user()->can('delete_multipics'))' +
-                                    '<a id="'+ row.id +'" class="item-edit delete" title="{{ trans("admin.delete") }}">' +
-                                    feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' }) +
-                                    '</a>' +
-                                '@endif' +
-                            '</span>'
-                        );
-                    }
-                }
-            ],
-            "columnDefs": [
-            {
-                // Checkboxes
-                "targets": 0,
-                orderable: false,
-                responsivePriority: 3,
-                render: function(data, type, row, meta) {
-                    return (
-                        '<div class="custom-control custom-checkbox">' +
-                            '<input class="custom-control-input dt-checkboxes item_checkbox" data-id="'+ row.id +'" type="checkbox" id="'+ row.id +'" />' +
-                            '<label class="custom-control-label" for="'+ row.id +'"></label>' +
-                        '</div>'
-                    );
-                },
-                checkboxes: {
-                    selectAllRender:
-                        '<div class="custom-control custom-checkbox">' +
-                            '<input class="custom-control-input" type="checkbox" id="checkboxSelectAll" />' +
-                            '<label class="custom-control-label" for="checkboxSelectAll"></label>' +
-                        '</div>'
-                }
-            },
-            {
-                "targets": 4,
-                render: function (data, type, row, meta){
-                    var $checked = $(`
-                        <div class="custom-switch-status">
-                            <div class="custom-control custom-switch custom-switch-success">
-                                <input type="checkbox" data-id="${row.id}" id="status(${row.id})"
-                                class="custom-control-input status" ${ row.enabled == 1 ? 'checked' : '' }
-                                onchange=selectStatus(${row.id}) >
-                                <label class="custom-control-label" for="status(${row.id})" title="{{ trans('admin.update_status') }}">
-                                    <span class="switch-icon-left"><i data-feather="check"></i></span>
-                                    <span class="switch-icon-right"><i data-feather="x"></i></span>
-                                </label>
-                            </div>
-                        </div>
-                    `);
-                    $checked.prop('checked', true).attr('checked', 'checked');
-                    return $checked[0].outerHTML
-                }
-            } ],
-            dom:  "<'row'<''l><'col-sm-8 text-center'B><''f>>" +
-                  "<'row'<'col-sm-12'tr>>" +
-                  "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-            buttons: [
-                { text: '<i data-feather="refresh-ccw"></i> {{ trans("admin.refresh") }}',
-                  className: 'btn dtbtn btn-sm btn-dark',
-                  attr: { 'title': '{{ trans("admin.refresh") }}' },
-                    action: function (e, dt, node, config) {
-                        dt.ajax.reload(null, false);
-                    }
-                },
-                { text: '<i data-feather="trash-2"></i> {{ trans("admin.trash") }}',
-                  className: '@if (auth()->user()->can("trash_multipics")) btn dtbtn btn-sm btn-danger multi_delete @else btn dtbtn btn-sm btn-danger disabled @endif',
-                  attr: { 'title': '{{ trans("admin.trash") }}' }
-                },
-                { extend: 'csvHtml5', charset: "UTF-8", bom: true,
-                  className: 'btn dtbtn btn-sm btn-success',
-                  text: '<i data-feather="file"></i> CSV',
-                  attr: { 'title': 'CSV' }
-                },
-                { extend: 'excelHtml5', charset: "UTF-8", bom: true,
-                  className: 'btn dtbtn btn-sm btn-success',
-                  text: '<i data-feather="file"></i> Excel',
-                  attr: { 'title': 'Excel' }
-                },
-                { text: '<i data-feather="printer"></i> {{ trans("admin.print") }}',
-                  className: '@if (auth()->user()->can("print_multipics")) btn dtbtn btn-sm btn-primary @else btn dtbtn btn-sm btn-primary disabled @endif',
-                  extend: 'print', attr: { 'title': '{{ trans("admin.print") }}' }
-                },
-                { extend: 'pdfHtml5', charset: "UTF-8", bom: true,
-                  className: 'btn dtbtn btn-sm btn-danger',
-                  text: '<i data-feather="file"></i> PDF',
-                  pageSize: 'A4', attr: { 'title': 'PDF' }
-                },
-                { text: '<i data-feather="plus"></i> {{ trans("admin.create_multipic") }}',
-                  className: '@if (auth()->user()->can("create_multipics")) btn dtbtn btn-sm btn-primary @else btn dtbtn btn-sm btn-primary disabled @endif',
-                  attr: {
-                    'title': '{{ trans("admin.create_multipic") }}',
-                    'data-toggle': 'modal',
-                    'data-target': '#multipicModal',
-                    'name': 'create_multipic',
-                    'id': 'create_multipic' }
-                },
-            ],
-            language: {
-                url: getDataTableLanguage(),
-                search: ' ',
-                searchPlaceholder: '{{ trans("admin.search") }}...'
-            }
-        });
 
-        // Open Modal
-        $(document).on('click', '#create_multipic', function(){
-            $('.modal-title').text("{{ trans('admin.create_multipic') }}");
-            $('#action_button').val("Add");
-            $('#multipicForm').trigger("reset");
-            $('#form_result').html('');
-            $('#action').val("Add");
-        });
-
-        // Add Data
-        $('#multipicForm').on('submit', function(event){
-            event.preventDefault();
-            if($('#action').val() == 'Add')
-            {
-                var formData = new FormData(this);
-                $.ajax({
-                    url: "{{ route('admin.multipics.store') }}",
-                    method: "POST",
-                    data: formData,
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function(data)
-                    {
-                        var html = '';
-                    if(data.errors)
-                    {
-                        html = '<div class="alert alert-danger">';
-                    for(var count = 0; count < data.errors.length; count++)
-                    {
-                        html += '<div class="alert-body">' + data.errors[count] + '</div>';
-                    }
-                        html += '</div>';
-                    }
-                    if(data.success)
-                    {
-                        $('#multipicForm')[0].reset();
-                        $('#data-table').DataTable().ajax.reload();
-                        $("[data-dismiss=modal]").trigger({ type: "click" });
-                        var lang = "{{ app()->getLocale() }}";
-                        if (lang == "ar") {
-                            toastr.success('{{ trans('admin.added_successfully') }}');
-                        } else {
-                            toastr.success('{{ trans('admin.added_successfully') }}', '', {positionClass: 'toast-bottom-left'});
-                        }
-                    }
-                        $('#form_result').html(html);
-                    }
-                });
-            }
-            if($('#action').val() == "Edit")
-            {
-                var formData = new FormData(this);
-                $.ajax({
-                    url: "{{ route('admin.multipics.update') }}",
-                    method: "POST",
-                    data: formData,
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function(data)
-                    {
-                        var html = '';
-                    if(data.errors)
-                    {
-                        html = '<div class="alert alert-danger">';
-                    for(var count = 0; count < data.errors.length; count++)
-                    {
-                        html += '<div class="alert-body">' + data.errors[count] + '</div>';
-                    }
-                        html += '</div>';
-                    }
-                    if(data.success)
-                    {
-                        $('#multipicForm')[0].reset();
-                        $('#data-table').DataTable().ajax.reload();
-                        $("[data-dismiss=modal]").trigger({ type: "click" });
-                        var lang = "{{ app()->getLocale() }}";
-                        if (lang == "ar") {
-                            toastr.success('{{ trans('admin.updated_successfully') }}');
-                        } else {
-                            toastr.success('{{ trans('admin.updated_successfully') }}', '', {positionClass: 'toast-bottom-left'});
-                        }
-                    }
-                        $('#form_result').html(html);
-                    }
-                });
-            }
-        });
-
-        // Edit Data
-        $(document).on('click', '.edit', function(){
-            var id = $(this).attr('id');
-            $('#form_result').html('');
-            $.ajax({
-                url: "/admin/multipics/"+ id +"/edit",
-                dataType: "json",
-                success: function(html){
-                    $('#name_ar').val(html.data.name.ar);
-                    $('#name_en').val(html.data.name.en);
-                    $('#price').val(html.data.price);
-                    $('#hidden_id').val(html.data.id);
-                    $('.modal-title').text("{{ trans('admin.edit_multipic') }}");
-                    $('#action_button').val("Edit");
-                    $('#action').val("Edit");
-                }
-            });
-        });
-    });
-
-    // Filter Status
-    function filter_status(enabled_filter = null){
-        enabled = enabled_filter.value;
-        $('#data-table').DataTable().ajax.url(getLocation +'?enabled='+ enabled +'&type=filter').load();
-    }
 </script>
 
 @endpush
